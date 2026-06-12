@@ -2,20 +2,19 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.css';
 
-export default function Navbar({ sections, hasData, profile }) {
+export default function Navbar({ profile }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Build nav links dynamically — only include sections that have data
-  const links = sections
-    .filter((s) => {
-      // Hero is never in the nav
-      if (s.id === 'hero') return false;
-      // Sections with a dataKey only show if they have data
-      if (s.dataKey) return hasData(s.dataKey);
-      return true;
-    })
-    .map((s) => ({ href: `#${s.id}`, label: s.label }));
+  // Define navigation links directly
+  const links = [
+    { href: '#about', label: 'About' },
+    { href: '#experience', label: 'Experience' },
+    { href: '#projects', label: 'Projects' },
+    { href: '#skills', label: 'Skills' },
+    { href: '#achievements', label: 'Achievements' },
+    { href: '#certifications', label: 'Certifications' }
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

@@ -1,32 +1,63 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SectionSpine from './SectionSpine';
 import './Projects.css';
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Projects({ projects }) {
-  const [active, setActive] = useState(0);
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const cards = trackRef.current?.querySelectorAll('.project-card');
-    if (!cards) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && e.intersectionRatio > 0.5) {
-            const idx = Number(e.target.dataset.idx);
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray('.project-card');
+      if (cards.length === 0) return;
+
+      // Reveal section
+      gsap.fromTo(
+        sectionRef.current.querySelector('.projects-header'),
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          },
+        }
+      );
+
+      // Horizontal Scroll
+      gsap.to(cards, {
+        xPercent: -100 * (cards.length - 1),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: trackRef.current,
+          pin: true,
+          scrub: 1,
+          snap: 1 / (cards.length - 1),
+          start: 'center center',
+          end: () => `+=${window.innerWidth * cards.length}`,
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const idx = Math.round(progress * (cards.length - 1));
             setActive(idx);
-          }
-        });
-      },
-      { threshold: [0.5, 0.75] }
-    );
-    cards.forEach((c) => io.observe(c));
-    return () => io.disconnect();
-  }, []);
+          },
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [projects]);
 
   return (
     <section className="projects section" id="projects" ref={sectionRef}>
+      <SectionSpine direction="right" />
       <div className="container">
         <div className="projects-header">
           <span className="section-label" data-reveal>Selected Work</span>

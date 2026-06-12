@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Html, Stars, Line } from '@react-three/drei';
 import { FaReact, FaNodeJs, FaPython, FaDocker, FaAws, FaJava, FaGit, FaFigma, FaHtml5, FaCss3, FaTerminal } from 'react-icons/fa';
 import { SiJavascript, SiTypescript, SiTailwindcss, SiMongodb, SiExpress, SiNextdotjs, SiCplusplus, SiFirebase, SiPostgresql, SiNumpy, SiScikitlearn, SiPandas, SiOpencv } from 'react-icons/si';
 import './Skills.css';
 
 /*
-  Interactive Skills Constellation — orbital rings with skill nodes.
-  Each category is a ring. Skills orbit around it. Hover shows detail.
-  On mobile, falls back to a glowing card grid.
+  Interactive 3D Skills Constellation using Three.js & React Three Fiber.
+  Features a fully interactive spherical node map that users can rotate and zoom.
 */
 
 const getSkillIcon = (skillName) => {
@@ -37,21 +37,135 @@ const getSkillIcon = (skillName) => {
   return <FaTerminal />;
 };
 
+const COLORS = ['#c8ff00', '#00d4ff', '#7c3aed', '#ff6b6b', '#f59e0b'];
+
+function SkillNode({ position, skill }) {
+  const [hovered, setHovered] = useState(false);
+  const color = skill.color;
+
+  // Make the HTML overlay larger if hovered
+  return (
+    <group>
+      {/* Connection Line to Core */}
+      <Line 
+        points={[[0, 0, 0], position]} 
+        color={color} 
+        opacity={hovered ? 0.6 : 0.15} 
+        transparent 
+        lineWidth={hovered ? 3 : 1}
+      />
+      
+      {/* 3D Node Sphere */}
+      <mesh 
+        position={position}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); }}
+        onPointerOut={() => setHovered(false)}
+      >
+        <sphereGeometry args={[0.25, 16, 16]} />
+        <meshStandardMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={hovered ? 2 : 0.6} 
+        />
+      </mesh>
+
+      {/* 2D HTML Overlay attached to 3D coords */}
+      <Html position={position} center distanceFactor={12} zIndexRange={[100, 0]}>
+        <div 
+          className={`skill-3d-html ${hovered ? 'is-hovered' : ''}`}
+          style={{ '--node-color': color }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          <div className="skill-3d-icon">
+            {getSkillIcon(skill.name)}
+          </div>
+          <span className="skill-3d-name">{skill.name}</span>
+        </div>
+      </Html>
+    </group>
+  );
+}
+
+function Constellation({ skillsData }) {
+  const groupRef = useRef();
+
+  // Slow continuous auto-rotation
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += 0.0015;
+      groupRef.current.rotation.x += 0.0005;
+    }
+  });
+
+  // Calculate uniform spherical distribution (Fibonacci lattice)
+  const points = useMemo(() => {
+    const samples = skillsData.length;
+    const radius = 6;
+    const pts = [];
+    const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle
+    
+    for (let i = 0; i < samples; i++) {
+      const y = 1 - (i / (samples - 1)) * 2; // y goes from 1 to -1
+      const radiusAtY = Math.sqrt(1 - y * y); 
+      const theta = phi * i; 
+      
+      const x = Math.cos(theta) * radiusAtY;
+      const z = Math.sin(theta) * radiusAtY;
+      
+      // Randomize distance slightly for a more organic feel
+      const jitter = 0.8 + Math.random() * 0.4;
+      pts.push([x * radius * jitter, y * radius * jitter, z * radius * jitter]);
+    }
+    return pts;
+  }, [skillsData.length]);
+
+  return (
+    <group ref={groupRef}>
+      {/* Core Node */}
+      <mesh>
+        <icosahedronGeometry args={[0.8, 1]} />
+        <meshBasicMaterial color="#c8ff00" wireframe />
+      </mesh>
+      
+      {/* Skill Nodes */}
+      {skillsData.map((skill, i) => (
+        <SkillNode key={skill.name} position={points[i]} skill={skill} />
+      ))}
+    </group>
+  );
+}
+
 export default function Skills({ skills }) {
   const ref = useRef(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [hoveredSkill, setHoveredSkill] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
 
-  const categories = Object.entries(skills);
-  const COLORS = ['#c8ff00', '#00d4ff', '#7c3aed', '#ff6b6b', '#f59e0b'];
+  const categories = Object.keys(skills);
+
+  // Flatten and filter the skills data into a single array with assigned colors
+  const filteredSkills = useMemo(() => {
+    const arr = [];
+    Object.entries(skills).forEach(([cat, list], i) => {
+      if (activeCategory && activeCategory !== cat) return;
+      list.forEach(skillName => {
+        arr.push({ name: skillName, category: cat, color: COLORS[i % COLORS.length] });
+      });
+    });
+    return arr;
+  }, [skills, activeCategory]);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+    // Manage document scroll lock when canvas is locked
+    if (isLocked) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isLocked]);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -69,323 +183,76 @@ export default function Skills({ skills }) {
     return () => io.disconnect();
   }, []);
 
-  const toggleCategory = (cat) => {
-    setActiveCategory(activeCategory === cat ? null : cat);
-  };
-
   return (
     <section className="skills section" id="skills" ref={ref}>
       <div className="container">
         <div className="skills-header">
           <span className="section-label" data-reveal>Toolbelt</span>
           <h2 className="section-title" data-reveal>
-            My tech <span className="gradient">constellation</span>.
+            My 3D <span className="gradient">constellation</span>.
           </h2>
           <p className="section-subtitle" data-reveal>
-            Click a category to focus. Hover skills to explore.
+            Explore the universe of my skills. Select a category below to filter.
           </p>
         </div>
 
         {/* Category pills */}
-        <div className="skills-pills" data-reveal>
+        <div className="skills-pills" data-reveal style={{ marginBottom: '24px' }}>
           <button
             className={`skill-pill ${activeCategory === null ? 'is-active' : ''}`}
             onClick={() => setActiveCategory(null)}
           >
             All
           </button>
-          {categories.map(([cat], i) => (
+          {categories.map((cat, i) => (
             <button
               key={cat}
               className={`skill-pill ${activeCategory === cat ? 'is-active' : ''}`}
               style={{ '--pill-color': COLORS[i % COLORS.length] }}
-              onClick={() => toggleCategory(cat)}
+              onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        {/* Constellation / Grid */}
-        {isMobile ? (
-          <MobileGrid
-            categories={categories}
-            colors={COLORS}
-            activeCategory={activeCategory}
-          />
-        ) : (
-          <DesktopConstellation
-            categories={categories}
-            colors={COLORS}
-            activeCategory={activeCategory}
-            hoveredSkill={hoveredSkill}
-            setHoveredSkill={setHoveredSkill}
-          />
-        )}
+        {/* 3D Canvas Container */}
+        <div className={`canvas-container ${isLocked ? 'is-locked' : ''}`} data-reveal>
+          {/* Lock Overlay / Toggle */}
+          <button 
+            className="canvas-lock-btn" 
+            onClick={() => setIsLocked(!isLocked)}
+          >
+            {isLocked ? '🔓 Unlock Scroll' : '🔒 Lock & Zoom'}
+          </button>
+
+          <Canvas camera={{ position: [0, 0, 14], fov: 50 }}>
+            {/* Environment lighting */}
+            <ambientLight intensity={0.6} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} />
+            <pointLight position={[-10, -10, -10]} intensity={0.5} />
+            
+            {/* Constellation Logic */}
+            <Constellation skillsData={filteredSkills} />
+            
+            {/* Interactive Controls */}
+            <OrbitControls 
+              enableZoom={isLocked} 
+              enablePan={false} 
+              autoRotate={false}
+              maxDistance={25}
+              minDistance={5}
+            />
+            
+            {/* Background Stars */}
+            <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+          </Canvas>
+          
+          <div className="canvas-hint">
+            {isLocked ? 'Scroll freely to zoom' : 'Click "Lock & Zoom" above to enable scrolling inside'}
+          </div>
+        </div>
       </div>
     </section>
-  );
-}
-
-function DesktopConstellation({ categories, colors, activeCategory, hoveredSkill, setHoveredSkill }) {
-  const containerRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 1000, height: 750 });
-  const [rotation, setRotation] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const lastX = useRef(0);
-
-  useEffect(() => {
-    const updateSize = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        // Scale it up significantly as requested by the user
-        setDimensions({ width: rect.width, height: Math.max(850, rect.width * 0.75) });
-      }
-    };
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  const handlePointerDown = (e) => {
-    setIsDragging(true);
-    lastX.current = e.clientX;
-  };
-
-  const handlePointerMove = (e) => {
-    if (!isDragging) return;
-    const delta = e.clientX - lastX.current;
-    setRotation((r) => r + delta * 0.3); // Adjust rotation sensitivity
-    lastX.current = e.clientX;
-  };
-
-  const handlePointerUp = () => {
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('pointermove', handlePointerMove);
-      window.addEventListener('pointerup', handlePointerUp);
-      return () => {
-        window.removeEventListener('pointermove', handlePointerMove);
-        window.removeEventListener('pointerup', handlePointerUp);
-      };
-    }
-  }, [isDragging]);
-
-  const { width, height } = dimensions;
-  const cx = width / 2;
-  const cy = height / 2;
-
-  return (
-    <div
-      ref={containerRef}
-      className="constellation-container"
-      data-reveal
-      onPointerDown={handlePointerDown}
-      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-    >
-      <svg
-        className="constellation-svg"
-        viewBox={`0 0 ${width} ${height}`}
-        width="100%"
-        height={height}
-        style={{ overflow: 'visible' }}
-      >
-        <defs>
-          <filter id="nodeGlow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        <g
-          style={{
-            transformOrigin: `${cx}px ${cy}px`,
-            transform: `rotate(${rotation}deg)`,
-            // Add a slight spring back or just smooth following if we wanted
-          }}
-        >
-          {/* Orbit rings - removed CSS animation for manual control */}
-          {categories.map(([cat], catIdx) => {
-            const isActive = activeCategory === null || activeCategory === cat;
-            const radius = 140 + catIdx * 90; // Much larger rings
-            
-            return (
-              <circle
-                key={`orbit-${cat}`}
-                cx={cx}
-                cy={cy}
-                r={radius}
-                fill="none"
-                stroke={colors[catIdx % colors.length]}
-                strokeWidth={isActive ? 1.5 : 0.5}
-                strokeDasharray="6 12"
-                opacity={isActive ? 0.4 : 0.1}
-                className="orbit-ring"
-                style={{ 
-                  transition: 'opacity 0.5s ease',
-                }}
-              />
-            );
-          })}
-
-          {/* Skill nodes */}
-          {categories.map(([cat, skillList], catIdx) => {
-            const isActive = activeCategory === null || activeCategory === cat;
-            const radius = 140 + catIdx * 90;
-            const color = colors[catIdx % colors.length];
-
-            return skillList.map((skill, skillIdx) => {
-              const angle = (skillIdx / skillList.length) * Math.PI * 2 - Math.PI / 2;
-              const x = cx + Math.cos(angle) * radius;
-              const y = cy + Math.sin(angle) * radius;
-              const isHovered = hoveredSkill === `${cat}-${skill}`;
-              const iconSize = isHovered ? 36 : 28; // Increased base size
-
-              return (
-                <g
-                  key={`${cat}-${skill}`}
-                  className="skill-node-group"
-                  onMouseEnter={() => setHoveredSkill(`${cat}-${skill}`)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                  style={{
-                    opacity: isActive ? 1 : 0.15,
-                    transition: 'opacity 0.4s ease',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {/* Connection line to center */}
-                  {isHovered && (
-                    <line
-                      x1={cx} y1={cy}
-                      x2={x} y2={y}
-                      stroke={color}
-                      strokeWidth="1"
-                      opacity="0.6"
-                      strokeDasharray="4 4"
-                    />
-                  )}
-
-                  {/* Node Backing (Glow + Background) */}
-                  <circle
-                    cx={x} cy={y} r={iconSize / 2 + 6}
-                    fill="rgba(0,0,0,0.6)"
-                    stroke={color}
-                    strokeWidth={isHovered ? 2 : 1}
-                    opacity={isHovered ? 1 : 0.8}
-                    filter={isHovered ? 'url(#nodeGlow)' : undefined}
-                    style={{ transition: 'all 0.3s ease' }}
-                  />
-
-                  {/* React Icon */}
-                  <foreignObject
-                    x={x - iconSize / 2}
-                    y={y - iconSize / 2}
-                    width={iconSize}
-                    height={iconSize}
-                    style={{ overflow: 'visible', pointerEvents: 'none' }}
-                  >
-                    <div style={{ 
-                      color: color, 
-                      fontSize: `${iconSize}px`, 
-                      transition: 'all 0.3s ease',
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      width: '100%', 
-                      height: '100%',
-                      filter: isHovered ? `drop-shadow(0 0 8px ${color})` : 'none',
-                      // Counter-rotate the icon so it stays upright!
-                      transform: `rotate(${-rotation}deg)`
-                    }}>
-                      {getSkillIcon(skill)}
-                    </div>
-                  </foreignObject>
-
-                  {/* Label */}
-                  <text
-                    x={x}
-                    y={y + iconSize / 2 + 18}
-                    fill={color}
-                    fontSize={isHovered ? 15 : 13}
-                    fontWeight={isHovered ? 600 : 400}
-                    textAnchor="middle"
-                    fontFamily="var(--font-mono)"
-                    opacity={isHovered ? 1 : 0.7}
-                    style={{ 
-                      transition: 'all 0.3s ease', 
-                      pointerEvents: 'none',
-                      // Counter-rotate the text from the node center
-                      transformOrigin: `${x}px ${y}px`,
-                      transform: `rotate(${-rotation}deg)`
-                    }}
-                  >
-                    {skill}
-                  </text>
-                </g>
-              );
-            });
-          })}
-        </g>
-
-        {/* Center node */}
-        <circle cx={cx} cy={cy} r="20" fill="rgba(0,0,0,0.8)" stroke="#c8ff00" strokeWidth="2" opacity="0.8" />
-        <circle cx={cx} cy={cy} r="6" fill="#c8ff00" opacity="1" filter="url(#nodeGlow)" />
-        <text
-          x={cx} y={cy + 36}
-          fill="#c8ff00"
-          fontSize="14"
-          fontWeight="600"
-          textAnchor="middle"
-          fontFamily="var(--font-mono)"
-          opacity="0.9"
-        >
-          CORE
-        </text>
-      </svg>
-    </div>
-  );
-}
-
-function MobileGrid({ categories, colors, activeCategory }) {
-  return (
-    <div className="skills-mobile-grid">
-      {categories.map(([cat, skillList], catIdx) => {
-        const isActive = activeCategory === null || activeCategory === cat;
-        const color = colors[catIdx % colors.length];
-
-        return (
-          <AnimatePresence key={cat}>
-            {isActive && (
-              <motion.div
-                className="skill-card-mobile"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                style={{ '--card-color': color }}
-              >
-                <h3 className="skill-card-title">{cat}</h3>
-                <div className="skill-card-chips">
-                  {skillList.map((skill) => (
-                    <div key={skill} className="skill-chip-mobile">
-                      <span className="skill-chip-icon" style={{ color: color }}>
-                        {getSkillIcon(skill)}
-                      </span>
-                      {skill}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        );
-      })}
-    </div>
   );
 }

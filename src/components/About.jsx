@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { gsap } from 'gsap';
+import SectionSpine from './SectionSpine';
 import './About.css';
 
 export default function About({ profile, education, projects, certifications }) {
@@ -9,25 +11,26 @@ export default function About({ profile, education, projects, certifications }) 
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const imgY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const imgY = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const imgScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.95]);
 
   useEffect(() => {
-    const els = ref.current?.querySelectorAll('[data-reveal]');
-    if (!els) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            io.unobserve(e.target);
-          }
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('[data-reveal]').forEach((el) => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+          },
         });
-      },
-      { threshold: 0.15 }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+      });
+    }, ref);
+
+    return () => ctx.revert();
   }, []);
 
   // Dynamic stats computed from actual data
@@ -40,17 +43,13 @@ export default function About({ profile, education, projects, certifications }) 
         <div className="about-photo" data-reveal>
           <motion.div className="photo-frame" style={{ y: imgY, scale: imgScale }}>
             <img
-              src="/images/profile.JPG"
+              src="/images/profile.jpg"
               alt={`Portrait of ${profile.name}`}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                e.currentTarget.nextElementSibling.style.display = 'flex';
-              }}
             />
             <div className="photo-fallback" aria-hidden>
               <span className="fallback-initials">DS</span>
               <span className="fallback-label">your photo here</span>
-              <span className="fallback-hint">public/images/profile.JPG</span>
+              <span className="fallback-hint">public/images/profile.jpg</span>
             </div>
           </motion.div>
           <div className="photo-sticker">
