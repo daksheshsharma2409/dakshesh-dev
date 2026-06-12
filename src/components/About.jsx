@@ -41,15 +41,15 @@ export default function About({ profile, education, projects, certifications }) 
     <section className="about section" id="about" ref={ref}>
       <div className="container about-grid">
         <div className="about-photo" data-reveal>
-          <motion.div className="photo-frame" style={{ y: imgY, scale: imgScale }}>
+          <motion.div className="photo-frame" style={{ y: imgY, scale: "imgScale"}}>
+            <div className="photo-fallback" aria-hidden>
             <img
-              src="/images/profile.jpg"
+              src="/images/profile.png"
               alt={`Portrait of ${profile.name}`}
             />
-            <div className="photo-fallback" aria-hidden>
-              <span className="fallback-initials">DS</span>
-              <span className="fallback-label">your photo here</span>
-              <span className="fallback-hint">public/images/profile.jpg</span>
+              {/* <span className="fallback-initials">DS</span> */}
+              {/* <span className="fallback-label">your photo here</span> */}
+              {/* <span className="fallback-hint">public/images/profile.jpg</span> */}
             </div>
           </motion.div>
           <div className="photo-sticker">

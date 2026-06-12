@@ -248,9 +248,6 @@ export default function Skills({ skills }) {
             <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
           </Canvas>
           
-          <div className="canvas-hint">
-            {isLocked ? 'Scroll freely to zoom' : 'Click "Lock & Zoom" above to enable scrolling inside'}
-          </div>
         </div>
       </div>
     </section>

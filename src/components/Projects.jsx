@@ -33,23 +33,23 @@ export default function Projects({ projects }) {
       );
 
       // Horizontal Scroll
-      gsap.to(cards, {
-        xPercent: -100 * (cards.length - 1),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: trackRef.current,
-          pin: true,
-          scrub: 1,
-          snap: 1 / (cards.length - 1),
-          start: 'center center',
-          end: () => `+=${window.innerWidth * cards.length}`,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const idx = Math.round(progress * (cards.length - 1));
-            setActive(idx);
-          },
-        },
-      });
+      // gsap.to(cards, {
+      //   xPercent: -100 * (cards.length - 1),
+      //   ease: 'none',
+      //   scrollTrigger: {
+      //     trigger: trackRef.current,
+      //     pin: true,
+      //     scrub: 1,
+      //     snap: 1 / (cards.length - 1),
+      //     start: 'center center',
+      //     end: () => `+=${window.innerWidth * cards.length}`,
+      //     onUpdate: (self) => {
+      //       const progress = self.progress;
+      //       const idx = Math.round(progress * (cards.length - 1));
+      //       setActive(idx);
+      //     },
+      //   },
+      // });
     }, sectionRef);
 
     return () => ctx.revert();
