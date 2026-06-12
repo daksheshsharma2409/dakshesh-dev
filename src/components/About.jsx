@@ -40,7 +40,7 @@ export default function About({ profile, education, projects, certifications }) 
         <div className="about-photo" data-reveal>
           <motion.div className="photo-frame" style={{ y: imgY, scale: imgScale }}>
             <img
-              src="/images/about.jpg"
+              src="/images/profile.JPG"
               alt={`Portrait of ${profile.name}`}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -50,7 +50,7 @@ export default function About({ profile, education, projects, certifications }) 
             <div className="photo-fallback" aria-hidden>
               <span className="fallback-initials">DS</span>
               <span className="fallback-label">your photo here</span>
-              <span className="fallback-hint">public/images/about.jpg</span>
+              <span className="fallback-hint">public/images/profile.JPG</span>
             </div>
           </motion.div>
           <div className="photo-sticker">

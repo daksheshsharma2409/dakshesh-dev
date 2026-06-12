@@ -1,36 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { profile } from '../data/portfolio';
 import './Contact.css';
 
-const socials = [
-  {
-    label: 'LinkedIn',
-    href: profile.social.linkedin,
-    handle: '/in/dakshesh-sharma',
-    color: '#0a66c2',
-  },
-  {
-    label: 'GitHub',
-    href: profile.social.github,
-    handle: '/dakshesh-sharma',
-    color: '#ffffff',
-  },
-  {
-    label: 'LeetCode',
-    href: profile.social.leetcode,
-    handle: '/dakshesh-sharma',
-    color: '#ffa116',
-  },
-  {
-    label: 'Email',
-    href: profile.social.email,
-    handle: 'dakshesh.sharma27@gmail.com',
-    color: '#c8ff00',
-  },
-];
-
-export default function Contact() {
+export default function Contact({ profile }) {
   const ref = useRef(null);
   const [copied, setCopied] = useState(false);
 
@@ -56,6 +28,33 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const socials = [
+    {
+      label: 'LinkedIn',
+      href: profile.social.linkedin,
+      handle: 'LinkedIn Profile',
+      color: '#0a66c2',
+    },
+    {
+      label: 'GitHub',
+      href: profile.social.github,
+      handle: 'GitHub Profile',
+      color: '#ffffff',
+    },
+    {
+      label: 'LeetCode',
+      href: profile.social.leetcode,
+      handle: 'LeetCode Profile',
+      color: '#ffa116',
+    },
+    {
+      label: 'Email',
+      href: profile.social.email,
+      handle: profile.email,
+      color: '#c8ff00',
+    },
+  ];
+
   return (
     <section className="contact section" id="contact" ref={ref}>
       <div className="container contact-inner">
@@ -66,9 +65,8 @@ export default function Contact() {
             <span className="gradient">Let's talk.</span>
           </h2>
           <p className="contact-bio" data-reveal>
-            I'm actively looking for full-time opportunities in data science
-            and quantitative research. Whether you have a role, a project,
-            or just want to chat about ML — my inbox is open.
+            {profile.availableFor}. Whether you have a project,
+            a role, or just want to chat about AI and Development — my inbox is open.
           </p>
 
           <motion.button

@@ -88,47 +88,38 @@ export default function SvgSpine() {
   // Compute the viewBox height — map page height to SVG coordinates
   const vbW = 200;
   const vbH = (pageHeight / window.innerWidth) * vbW;
-  const midX = vbW / 2;
+  
+  // Shift the spine to the far right edge (95% of width) to avoid content entirely
+  const baseX = vbW * 0.95;
 
-  // Generate a creative path that weaves through the entire page
+  // Generate a creative but highly subtle path that waves down the right edge
   const generatePath = () => {
-    const segments = Math.ceil(vbH / 120);
-    let d = `M ${midX} 0`;
+    const segments = Math.ceil(vbH / 200);
+    let d = `M ${baseX} 0`;
 
     for (let i = 0; i < segments; i++) {
-      const y1 = i * 120 + 30;
-      const y2 = i * 120 + 60;
-      const y3 = i * 120 + 90;
-      const yEnd = i * 120 + 120;
+      const y1 = i * 200 + 60;
+      const y2 = i * 200 + 140;
+      const yEnd = i * 200 + 200;
 
-      // Alternate between different creative curve patterns
-      const pattern = i % 6;
+      // Extremely subtle, long sweeping curves (drifting max 15 units)
+      const pattern = i % 4;
       switch (pattern) {
         case 0:
-          // Wide S-curve sweeping right
-          d += ` C ${midX + 70} ${y1}, ${midX + 85} ${y2}, ${midX + 40} ${yEnd}`;
+          // Gentle drift left
+          d += ` C ${baseX - 8} ${y1}, ${baseX - 15} ${y2}, ${baseX - 5} ${yEnd}`;
           break;
         case 1:
-          // Sweep back to left with tight curve
-          d += ` C ${midX + 20} ${y1}, ${midX - 80} ${y2}, ${midX - 50} ${yEnd}`;
+          // Sweep back to base
+          d += ` C ${baseX + 5} ${y1}, ${baseX + 10} ${y2}, ${baseX} ${yEnd}`;
           break;
         case 2:
-          // Elegant loop going right
-          d += ` C ${midX - 30} ${y1}, ${midX + 90} ${y2}, ${midX + 10} ${y3}`;
-          d += ` S ${midX - 40} ${yEnd - 10}, ${midX - 20} ${yEnd}`;
+          // Slight outer drift right
+          d += ` C ${baseX + 12} ${y1}, ${baseX + 15} ${y2}, ${baseX + 8} ${yEnd}`;
           break;
         case 3:
-          // Gentle wave through center
-          d += ` C ${midX - 60} ${y1}, ${midX + 60} ${y2}, ${midX + 30} ${yEnd}`;
-          break;
-        case 4:
-          // Tight spiral-like loop left
-          d += ` C ${midX + 50} ${y1}, ${midX - 90} ${y1 + 15}, ${midX - 45} ${y2}`;
-          d += ` S ${midX + 30} ${y3}, ${midX + 15} ${yEnd}`;
-          break;
-        case 5:
-          // Wide arc back to center
-          d += ` C ${midX + 40} ${y1}, ${midX - 70} ${y2}, ${midX} ${yEnd}`;
+          // Return smoothly to center
+          d += ` C ${baseX} ${y1}, ${baseX - 5} ${y2}, ${baseX} ${yEnd}`;
           break;
       }
     }
@@ -212,7 +203,7 @@ export default function SvgSpine() {
         {/* Traveling particle / draw-head */}
         <circle
           ref={particleRef}
-          cx={midX}
+          cx={baseX}
           cy="0"
           r="4"
           fill="url(#particleGrad)"

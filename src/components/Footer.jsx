@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { profile } from '../data/portfolio';
 import './Footer.css';
 
-export default function Footer() {
+export default function Footer({ profile }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -16,7 +15,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-left">
-          <span className="footer-brand">Dakshesh<span style={{ color: 'var(--accent)' }}>.</span></span>
+          <span className="footer-brand">{profile.firstName}<span style={{ color: 'var(--accent)' }}>.</span></span>
           <span className="footer-text">© {new Date().getFullYear()} · Built with care, GSAP, and a lot of chai.</span>
         </div>
 

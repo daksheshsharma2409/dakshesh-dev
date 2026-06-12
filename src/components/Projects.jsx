@@ -54,25 +54,7 @@ export default function Projects({ projects }) {
         </div>
       </div>
 
-      <div className="container">
-        <div className="project-pager">
-          {projects.map((p, i) => (
-            <button
-              key={p.id}
-              className={`pager-dot ${active === i ? 'is-active' : ''}`}
-              onClick={() => {
-                const el = trackRef.current?.querySelectorAll('.project-card')[i];
-                el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }}
-              aria-label={`Go to project ${i + 1}: ${p.title}`}
-              data-cursor="hover"
-            >
-              <span className="pager-num">0{i + 1}</span>
-              <span className="pager-title">{p.title}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+
     </section>
   );
 }
