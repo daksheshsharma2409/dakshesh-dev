@@ -11,7 +11,6 @@ import Skills from './components/Skills';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Cursor from './components/Cursor';
-import FloatingObjects from './components/FloatingObjects';
 
 // Import all JSON data
 import data from './data/portfolioData.json';
@@ -49,8 +48,7 @@ function App() {
   return (
     <>
       <Cursor />
-      <FloatingObjects />
-      <Navbar profile={data.profile} />
+      <Navbar profile={data.profile} data={data} />
       
       <main className="app-main">
         {hasData('profile') && <Hero profile={data.profile} />}

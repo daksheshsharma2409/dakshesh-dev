@@ -7,6 +7,13 @@
   z-index: 9999;
   will-change: transform;
   mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.custom-cursor.is-visible,
+.custom-cursor-dot.is-visible {
+  opacity: 1;
 }
 
 .custom-cursor {

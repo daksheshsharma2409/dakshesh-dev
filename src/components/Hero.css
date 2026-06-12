@@ -252,3 +252,82 @@
   .hero-actions { flex-direction: column; align-items: flex-start; }
   .btn { width: 100%; justify-content: center; }
 }
+
+/* ============================================================================
+   Glassmorphic Interactive Tech Badges (3D Physics Canvas)
+   ============================================================================ */
+.hero-tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: rgba(13, 13, 18, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: var(--text-h);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  pointer-events: auto; /* crucial to capture cursor hover events */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: 
+    transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    border-color 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    background 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.4), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.hero-tech-badge:active {
+  cursor: grabbing;
+}
+
+.badge-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-icon-wrap svg {
+  font-size: 19px;
+  color: var(--badge-color);
+  filter: drop-shadow(0 2px 8px var(--badge-shadow));
+  transition: transform 0.25s ease;
+}
+
+/* Hover effects: glows and brand colors */
+.hero-tech-badge:hover {
+  transform: scale(1.08) translateY(-2px);
+  background: rgba(20, 20, 30, 0.8);
+  border-color: var(--badge-color);
+  box-shadow: 
+    0 10px 35px var(--badge-shadow),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.hero-tech-badge:hover .badge-icon-wrap svg {
+  transform: rotate(12deg) scale(1.1);
+}
+
+/* Scale down for mobile/tablets */
+@media (max-width: 600px) {
+  .hero-tech-badge {
+    padding: 8px 12px;
+    font-size: 11px;
+    gap: 7px;
+    border-radius: 10px;
+  }
+  .badge-icon-wrap svg {
+    font-size: 15px;
+  }
+}
+

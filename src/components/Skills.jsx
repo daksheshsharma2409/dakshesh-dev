@@ -43,7 +43,6 @@ function SkillNode({ position, skill }) {
   const [hovered, setHovered] = useState(false);
   const color = skill.color;
 
-  // Make the HTML overlay larger if hovered
   return (
     <group>
       {/* Connection Line to Core */}
@@ -73,7 +72,7 @@ function SkillNode({ position, skill }) {
       <Html position={position} center distanceFactor={12} zIndexRange={[100, 0]}>
         <div 
           className={`skill-3d-html ${hovered ? 'is-hovered' : ''}`}
-          style={{ '--node-color': color }}
+          style={{ '--node-color': color, userSelect: 'none', WebkitUserSelect: 'none' }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
@@ -99,26 +98,35 @@ function Constellation({ skillsData }) {
   });
 
   // Calculate uniform spherical distribution (Fibonacci lattice)
+  // Use a deterministic seed so positions stay stable across re-renders
   const points = useMemo(() => {
     const samples = skillsData.length;
+    if (samples === 0) return [];
     const radius = 6;
     const pts = [];
     const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle
     
+    // Deterministic seeded pseudo-random for jitter
+    const seededRandom = (seed) => {
+      const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    };
+    
     for (let i = 0; i < samples; i++) {
-      const y = 1 - (i / (samples - 1)) * 2; // y goes from 1 to -1
+      const y = samples === 1 ? 0 : 1 - (i / (samples - 1)) * 2;
       const radiusAtY = Math.sqrt(1 - y * y); 
       const theta = phi * i; 
       
       const x = Math.cos(theta) * radiusAtY;
       const z = Math.sin(theta) * radiusAtY;
       
-      // Randomize distance slightly for a more organic feel
-      const jitter = 0.8 + Math.random() * 0.4;
+      const jitter = 0.85 + seededRandom(i) * 0.3;
       pts.push([x * radius * jitter, y * radius * jitter, z * radius * jitter]);
     }
     return pts;
   }, [skillsData.length]);
+
+  if (skillsData.length === 0 || points.length === 0) return null;
 
   return (
     <group ref={groupRef}>
@@ -139,7 +147,6 @@ function Constellation({ skillsData }) {
 export default function Skills({ skills }) {
   const ref = useRef(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [isLocked, setIsLocked] = useState(false);
 
   const categories = Object.keys(skills);
 
@@ -154,18 +161,6 @@ export default function Skills({ skills }) {
     });
     return arr;
   }, [skills, activeCategory]);
-
-  useEffect(() => {
-    // Manage document scroll lock when canvas is locked
-    if (isLocked) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isLocked]);
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -217,15 +212,7 @@ export default function Skills({ skills }) {
         </div>
 
         {/* 3D Canvas Container */}
-        <div className={`canvas-container ${isLocked ? 'is-locked' : ''}`} data-reveal>
-          {/* Lock Overlay / Toggle */}
-          <button 
-            className="canvas-lock-btn" 
-            onClick={() => setIsLocked(!isLocked)}
-          >
-            {isLocked ? '🔓 Unlock Scroll' : '🔒 Lock & Zoom'}
-          </button>
-
+        <div className="canvas-container" data-reveal>
           <Canvas camera={{ position: [0, 0, 14], fov: 50 }}>
             {/* Environment lighting */}
             <ambientLight intensity={0.6} />
@@ -237,7 +224,7 @@ export default function Skills({ skills }) {
             
             {/* Interactive Controls */}
             <OrbitControls 
-              enableZoom={isLocked} 
+              enableZoom={false} 
               enablePan={false} 
               autoRotate={false}
               maxDistance={25}
@@ -248,6 +235,7 @@ export default function Skills({ skills }) {
             <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
           </Canvas>
           
+          <div className="canvas-hint">Drag to rotate</div>
         </div>
       </div>
     </section>

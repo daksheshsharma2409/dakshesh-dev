@@ -2,19 +2,28 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.css';
 
-export default function Navbar({ profile }) {
+export default function Navbar({ profile, data }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Define navigation links directly
-  const links = [
-    { href: '#about', label: 'About' },
-    { href: '#experience', label: 'Experience' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#skills', label: 'Skills' },
-    { href: '#achievements', label: 'Achievements' },
-    { href: '#certifications', label: 'Certifications' }
+  // Only show nav links for sections that have data
+  const allLinks = [
+    { href: '#about', label: 'About', dataKey: 'profile' },
+    { href: '#experience', label: 'Experience', dataKey: 'experience' },
+    { href: '#projects', label: 'Projects', dataKey: 'projects' },
+    { href: '#skills', label: 'Skills', dataKey: 'skills' },
+    { href: '#achievements', label: 'Achievements', dataKey: 'achievements' },
+    { href: '#certifications', label: 'Certifications', dataKey: 'certifications' },
+    { href: '#contact', label: 'Contact', dataKey: 'profile' },
   ];
+
+  const links = allLinks.filter((l) => {
+    const val = data[l.dataKey];
+    if (!val) return false;
+    if (Array.isArray(val)) return val.length > 0;
+    if (typeof val === 'object') return Object.keys(val).length > 0;
+    return Boolean(val);
+  });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

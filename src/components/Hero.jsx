@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import HeroPhysicsCanvas from './HeroPhysicsCanvas';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,29 +14,28 @@ export default function Hero({ profile }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1) Big SVG path draws on initial load
       const big = bigPathRef.current;
-      if (big) {
-        const len = big.getTotalLength();
-        big.style.strokeDasharray = len;
-        big.style.strokeDashoffset = len;
-        gsap.to(big, {
-          strokeDashoffset: 0,
-          duration: 2.4,
-          ease: 'power3.inOut',
-          delay: 0.4,
-        });
-      }
+      if (!big) return;
 
-      // 2) As the user scrolls past the hero, the path "draws further"
-      // and the title floats upward — creating the "path animation on scroll"
-      // effect.
+      const len = big.getTotalLength();
+      big.style.strokeDasharray = len;
+      big.style.strokeDashoffset = len;
+
+      // 1) Draw the path on initial load
       gsap.to(big, {
         strokeDashoffset: 0,
+        duration: 2.4,
+        ease: 'power3.inOut',
+        delay: 0.4,
+      });
+
+      // 2) On scroll, fade the path out and float the title upward
+      gsap.to(big, {
+        opacity: 0,
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.current,
-          start: 'top top',
+          start: '60% top',
           end: 'bottom top',
           scrub: 0.6,
         },
@@ -62,6 +62,7 @@ export default function Hero({ profile }) {
       {/* Background grid + glow */}
       <div className="hero-bg">
         <div className="hero-grid" />
+        <HeroPhysicsCanvas />
         <div className="hero-glow hero-glow-1" />
         <div className="hero-glow hero-glow-2" />
         <div className="hero-noise" />

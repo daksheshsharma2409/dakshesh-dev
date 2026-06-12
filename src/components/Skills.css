@@ -22,45 +22,47 @@
   position: relative;
   overflow: hidden;
   cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .canvas-container:active {
   cursor: grabbing;
 }
 
-.canvas-container.is-locked {
-  border-color: var(--accent);
-  box-shadow: 0 0 30px rgba(200, 255, 0, 0.15);
+/* Category Filter Pills */
+.skills-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.canvas-lock-btn {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid var(--border);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 99px;
+.skill-pill {
+  padding: 10px 20px;
+  border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-soft);
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
-.canvas-lock-btn:hover {
+.skill-pill:hover {
   background: var(--surface-hover);
+  color: var(--text);
   border-color: var(--text-soft);
 }
 
-.canvas-container.is-locked .canvas-lock-btn {
-  background: rgba(200, 255, 0, 0.1);
-  border-color: var(--accent);
-  color: var(--accent);
+.skill-pill.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: var(--pill-color, var(--accent));
+  box-shadow: 0 0 16px rgba(200, 255, 0, 0.12),
+              inset 0 0 12px rgba(200, 255, 0, 0.05);
 }
 
 .canvas-hint {
@@ -91,6 +93,8 @@
   pointer-events: auto; /* Required to allow hover events inside the 3D scene */
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .skill-3d-icon {

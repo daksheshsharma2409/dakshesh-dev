@@ -26,10 +26,16 @@ export function useCustomCursor() {
     const dotPos = { x: mouse.x, y: mouse.y };
 
     let hovering = false;
+    let hasMoved = false;
 
     const onMove = (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
+      if (!hasMoved) {
+        hasMoved = true;
+        ring.classList.add('is-visible');
+        dot.classList.add('is-visible');
+      }
     };
 
     const tick = () => {
@@ -63,15 +69,31 @@ export function useCustomCursor() {
       }
     };
 
+    const onMouseLeave = () => {
+      ring.classList.remove('is-visible');
+      dot.classList.remove('is-visible');
+    };
+
+    const onMouseEnter = () => {
+      if (hasMoved) {
+        ring.classList.add('is-visible');
+        dot.classList.add('is-visible');
+      }
+    };
+
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseover', onOver);
     document.addEventListener('mouseout', onOut);
+    document.addEventListener('mouseleave', onMouseLeave);
+    document.addEventListener('mouseenter', onMouseEnter);
 
     return () => {
       cancelAnimationFrame(id);
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseover', onOver);
       document.removeEventListener('mouseout', onOut);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('mouseenter', onMouseEnter);
     };
   }, []);
 
