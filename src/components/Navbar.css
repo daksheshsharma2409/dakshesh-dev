@@ -46,6 +46,19 @@
   font-weight: 700;
 }
 
+/* SVG variant — keeps the lime accent and renders the "D" + "S" monogram. */
+.brand-mark--svg {
+  display: block;
+  flex-shrink: 0;
+  color: var(--accent);
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.brand:hover .brand-mark--svg {
+  transform: rotate(-6deg);
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
 .brand-text { font-size: 17px; }
 .brand-dot { color: var(--accent); }
 

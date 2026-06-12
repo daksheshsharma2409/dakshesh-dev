@@ -290,6 +290,25 @@
   cursor: grabbing;
 }
 
+/* ============================================================================
+   Contained tag float — each badge breathes within a small ~20-30px box.
+   Per-badge duration/delay/dx/dy are passed in via CSS custom properties
+   from HeroPhysicsCanvas.jsx so the badges are not in sync.
+   ============================================================================ */
+.tag-float {
+  animation: tag-float var(--float-duration, 4s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  will-change: transform;
+}
+
+@keyframes tag-float {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(var(--float-dx, 10px), calc(var(--float-dy, 10px) * -0.6)); }
+  50%  { transform: translate(0, calc(var(--float-dy, 10px) * -1)); }
+  75%  { transform: translate(calc(var(--float-dx, 10px) * -1), calc(var(--float-dy, 10px) * -0.4)); }
+  100% { transform: translate(0, 0); }
+}
+
 .badge-icon-wrap {
   display: flex;
   align-items: center;
@@ -305,10 +324,11 @@
 
 /* Hover effects: glows and brand colors */
 .hero-tech-badge:hover {
+  animation-play-state: paused;
   transform: scale(1.08) translateY(-2px);
   background: rgba(20, 20, 30, 0.8);
   border-color: var(--badge-color);
-  box-shadow: 
+  box-shadow:
     0 10px 35px var(--badge-shadow),
     0 2px 8px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);

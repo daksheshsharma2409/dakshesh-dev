@@ -149,7 +149,6 @@ export default function Skills({ skills }) {
   const [activeCategory, setActiveCategory] = useState(null);
 
   const categories = Object.keys(skills);
-
   // Flatten and filter the skills data into a single array with assigned colors
   const filteredSkills = useMemo(() => {
     const arr = [];
@@ -175,7 +174,18 @@ export default function Skills({ skills }) {
       { threshold: 0.15 }
     );
     ref.current?.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // Fade the "drag to explore" hint out after 3.5s
+    const hint = ref.current?.querySelector('.canvas-hint');
+    let fadeTimer;
+    if (hint) {
+      fadeTimer = setTimeout(() => hint.classList.add('is-faded'), 3500);
+    }
+
+    return () => {
+      io.disconnect();
+      if (fadeTimer) clearTimeout(fadeTimer);
+    };
   }, []);
 
   return (
@@ -218,23 +228,23 @@ export default function Skills({ skills }) {
             <ambientLight intensity={0.6} />
             <pointLight position={[10, 10, 10]} intensity={1.5} />
             <pointLight position={[-10, -10, -10]} intensity={0.5} />
-            
+
             {/* Constellation Logic */}
             <Constellation skillsData={filteredSkills} />
-            
+
             {/* Interactive Controls */}
-            <OrbitControls 
-              enableZoom={false} 
-              enablePan={false} 
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
               autoRotate={false}
               maxDistance={25}
               minDistance={5}
             />
-            
+
             {/* Background Stars */}
             <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
           </Canvas>
-          
+
           <div className="canvas-hint" aria-hidden>drag to explore</div>
         </div>
       </div>

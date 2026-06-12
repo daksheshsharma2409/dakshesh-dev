@@ -58,7 +58,8 @@
       "codeLink": "https://github.com/daksheshsharma2409/launchpad",
       "liveLink": "https://launchpad-three-flax.vercel.app/",
       "gradient": "linear-gradient(135deg, #c8ff00 0%, #00d4ff 100%)",
-      "date": "April 2026"
+      "date": "April 2026",
+      "image": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781305555/Screenshot_2026-06-09_at_7.36.20_PM_ymanbl.png"
     },
     {
       "id": "picked-n-packed",
@@ -74,7 +75,8 @@
       "codeLink": "https://github.com/daksheshsharma2409/picked_n_packed",
       "liveLink": "https://picked-n-packed.vercel.app/",
       "gradient": "linear-gradient(135deg, #7c3aed 0%, #c8ff00 100%)",
-      "date": "March 2026"
+      "date": "March 2026",
+      "image": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781305756/Screenshot_2026-06-13_at_4.38.59_AM_stjpvv.png"
     }
   ],
 
@@ -87,7 +89,8 @@
       "date": "August 2025",
       "description": "Comprehensive certification covering data structures, algorithms, and problem-solving with hands-on LeetCode practice.",
       "icon": "algo",
-      "color": "#c8ff00"
+      "color": "#c8ff00",
+      "image": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781306073/Udemy_DSA_cpp_rhskoq.jpg"
     },
     {
       "title": "Learn Python: The Complete Python Programming Course",
@@ -95,7 +98,8 @@
       "date": "June 2022",
       "description": "Full Python programming course covering syntax, data structures, OOP, file handling, and project-based learning.",
       "icon": "python",
-      "color": "#00d4ff"
+      "color": "#00d4ff",
+      "image": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781306073/Udemy_Python_kajgfo.jpg"
     }
   ],
 

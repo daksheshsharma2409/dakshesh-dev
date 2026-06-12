@@ -35,95 +35,74 @@ function getHomePos(index, count, vw, vh, isDesktop) {
   return { x: Math.cos(angle) * vw * 0.62, y: Math.sin(angle) * vh * 0.68 };
 }
 
+// Stable, varied animation parameters per badge —
+// duration between 3s and 6s, with a unique phase/delay
+// so badges never move in sync.
+function getFloatParams(i) {
+  // 8 unique combos from index; keep range constrained.
+  const duration = 3.2 + ((i * 0.41) % 2.8);  // 3.2s .. 6.0s
+  const delay    = -((i * 0.37) % 2.5);      // negative delay so all start mid-cycle on mount
+  // Drift amplitude: 8–14px on each axis (well within the 20-30px requirement)
+  const dx = 8 + ((i * 7) % 7);   // 8 .. 14
+  const dy = 8 + (((i + 3) * 5) % 7); // 8 .. 14
+  return { duration, delay, dx, dy };
+}
+
 function PhysicsBadges() {
   const count = TECH_DATA.length;
 
-  const particles = useMemo(() => {
-    return TECH_DATA.map((_, i) => ({
-      x: 0, y: 0,
-      vx: 0, vy: 0,
-      radius: 0.9,
-      // Unique phase offsets so each badge has its own gentle orbit path
-      phaseX: (i / count) * Math.PI * 2,
-      phaseY: (i / count) * Math.PI * 2 + 1.2,
-      orbitAmp: 0.18 + (i % 3) * 0.06, // subtle amplitude variation
-      speed: 0.28 + (i % 4) * 0.04,    // vary the orbit period slightly
-    }));
-  }, [count]);
+  // Per-badge float params, computed once.
+  const floatParams = useMemo(() => TECH_DATA.map((_, i) => getFloatParams(i)), [count]);
 
-  useFrame(({ viewport, clock }) => {
-    const t = clock.getElapsedTime();
+  // Stable node objects — one per badge — mutated each frame to set position.
+  const nodes = useRef(TECH_DATA.map((_, i) => ({ x: 0, y: 0, i }))).current;
+
+  useFrame(({ viewport }) => {
     const vw = viewport.width / 2;
     const vh = viewport.height / 2;
     const isDesktop = viewport.width >= 8.5;
-    const spring = 0.007;
-    const damp   = 0.97;
 
+    // No more random-walk / spring physics — the CSS keyframe animation
+    // on each badge handles the gentle drift, contained to ~20-30px.
+    // We just position each badge at its deterministic home, so they
+    // remain stable inside the hero bounds.
     for (let i = 0; i < count; i++) {
-      const p = particles[i];
       const home = getHomePos(i, count, vw, vh, isDesktop);
-
-      // Slow sine-wave orbit offset layered on top of spring home position
-      const orbitX = Math.sin(t * p.speed + p.phaseX) * p.orbitAmp * vw;
-      const orbitY = Math.cos(t * p.speed * 0.7 + p.phaseY) * p.orbitAmp * vh * 0.5;
-
-      const targetX = home.x + orbitX;
-      const targetY = home.y + orbitY;
-
-      const ax = (targetX - p.x) * spring;
-      const ay = (targetY - p.y) * spring;
-
-      p.vx = (p.vx + ax) * damp;
-      p.vy = (p.vy + ay) * damp;
-      p.x += p.vx;
-      p.y += p.vy;
-
-      // Soft boundary clamp
-      const xBound = vw - p.radius;
-      const yBound = vh - p.radius;
-      if (p.x < -xBound) { p.x = -xBound; p.vx *= -0.3; }
-      if (p.x >  xBound) { p.x =  xBound; p.vx *= -0.3; }
-      if (p.y < -yBound) { p.y = -yBound; p.vy *= -0.3; }
-      if (p.y >  yBound) { p.y =  yBound; p.vy *= -0.3; }
-    }
-
-    // Soft collision prevention
-    for (let i = 0; i < count; i++) {
-      for (let j = i + 1; j < count; j++) {
-        const a = particles[i], b = particles[j];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const minD = a.radius + b.radius;
-        if (dist < minD && dist > 0.01) {
-          const ov = minD - dist;
-          const nx = dx / dist, ny = dy / dist;
-          a.x -= nx * ov * 0.5; a.y -= ny * ov * 0.5;
-          b.x += nx * ov * 0.5; b.y += ny * ov * 0.5;
-        }
-      }
+      nodes[i].x = home.x;
+      nodes[i].y = home.y;
     }
   });
 
   return (
     <group>
       {TECH_DATA.map((t, i) => (
-        <TechBadge key={t.name} data={t} node={particles[i]} />
+        <TechBadge key={t.name} data={t} node={nodes[i]} floatParams={floatParams[i]} />
       ))}
     </group>
   );
 }
 
-function TechBadge({ data, node }) {
+function TechBadge({ data, node, floatParams }) {
   const ref = useRef();
   useFrame(() => {
     if (ref.current) ref.current.position.set(node.x, node.y, 0);
   });
+
+  // Inline style for the per-badge keyframe animation.
+  // @keyframes tag-float is defined in Hero.css and is contained to ~20-30px.
+  const animStyle = {
+    '--float-duration': `${floatParams.duration}s`,
+    '--float-delay': `${floatParams.delay}s`,
+    '--float-dx': `${floatParams.dx}px`,
+    '--float-dy': `${floatParams.dy}px`,
+  };
+
   return (
     <group ref={ref}>
       <Html center distanceFactor={8} zIndexRange={[100, 0]}>
         <div
-          className="hero-tech-badge"
-          style={{ '--badge-color': data.color, '--badge-shadow': data.shadowColor }}
+          className="hero-tech-badge tag-float"
+          style={{ ...animStyle, '--badge-color': data.color, '--badge-shadow': data.shadowColor }}
         >
           <div className="badge-icon-wrap">{data.icon}</div>
           <span className="badge-name">{data.name}</span>
