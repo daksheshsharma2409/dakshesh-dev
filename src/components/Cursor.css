@@ -1,0 +1,39 @@
+.custom-cursor,
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  transition: background 0.2s ease, width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+  background: transparent;
+}
+
+.custom-cursor.is-hover {
+  background: rgba(255, 255, 255, 0.9);
+  width: 56px;
+  height: 56px;
+}
+
+.custom-cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+
+.custom-cursor-dot.is-hover {
+  background: #0a0a0f;
+  width: 8px;
+  height: 8px;
+}

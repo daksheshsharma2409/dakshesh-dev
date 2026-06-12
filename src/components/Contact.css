@@ -1,0 +1,111 @@
+.contact {
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .contact-inner { grid-template-columns: 1fr; }
+}
+
+.contact-text { max-width: 600px; }
+
+.contact-bio {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 32px;
+}
+
+.email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  color: var(--text-h);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.email-btn:hover {
+  border-color: var(--accent);
+  background: var(--bg-elev-2);
+}
+
+.email-btn-text {
+  letter-spacing: 0.01em;
+}
+
+.email-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.social-card:hover {
+  border-color: var(--c, var(--accent));
+  background: var(--surface-hover);
+}
+
+.social-label {
+  font-size: 16px;
+  color: var(--text-h);
+  font-weight: 600;
+  min-width: 80px;
+  letter-spacing: -0.01em;
+}
+
+.social-handle {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-arrow {
+  color: var(--c, var(--text-soft));
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.social-card:hover .social-arrow {
+  transform: translateX(4px);
+}
