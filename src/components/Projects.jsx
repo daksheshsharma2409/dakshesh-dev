@@ -136,25 +136,13 @@ function ProjectCard({ project, idx, total, isActive }) {
       <div className="project-card-inner" ref={tiltRef} style={{ transition: 'transform 0.15s ease' }}>
         <div className="project-visual" style={{ background: project.gradient }}>
           <motion.div className="project-visual-img" style={{ y: imgY }}>
+            {/* TODO: Replace with actual project screenshot */}
             <img
-              src={project.image || ''}
-              alt={project.title}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
+              src={project.image || `https://placehold.co/800x450/111118/444455?text=${encodeURIComponent(project.title)}`}
+              alt={`${project.title} screenshot`}
+              loading="lazy"
             />
           </motion.div>
-          <div className="project-visual-fallback" aria-hidden>
-            <div className="fallback-shapes">
-              <div className="shape shape-1" />
-              <div className="shape shape-2" />
-              <div className="shape shape-3" />
-            </div>
-            <div className="fallback-meta">
-              <span className="fallback-num">0{idx + 1} / 0{total}</span>
-              <span className="fallback-tag">{project.tags[0]}</span>
-            </div>
-          </div>
           <div className="project-overlay" />
           <div className="project-tag-row">
             {project.tags.slice(0, 3).map((t) => (

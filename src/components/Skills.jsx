@@ -235,7 +235,7 @@ export default function Skills({ skills }) {
             <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
           </Canvas>
           
-          <div className="canvas-hint">Drag to rotate</div>
+          <div className="canvas-hint" aria-hidden>drag to explore</div>
         </div>
       </div>
     </section>

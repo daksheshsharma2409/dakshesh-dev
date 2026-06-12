@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
+import { FaFolderOpen, FaAward, FaLaptopCode, FaDownload } from 'react-icons/fa';
 import SectionSpine from './SectionSpine';
 import './About.css';
 
@@ -73,41 +74,54 @@ export default function About({ profile, education, projects, certifications }) 
           </h2>
 
           <p className="about-bio" data-reveal>
-            I'm a first-year B.Tech Artificial Intelligence student at{' '}
+            1st-year B.Tech <strong>Artificial Intelligence</strong> student at{' '}
             <strong>Newton School of Technology, Rishihood University</strong>.
-            I'm passionate about building things that live on the internet — 
-            from smart recommendation engines to responsive e-commerce 
-            storefronts. I believe the best way to learn is to ship.
+            I build things that live on the internet — recommendation engines,
+            storefronts, and everything in between.
           </p>
 
           <p className="about-bio" data-reveal>
-            When I'm not coding, you'll find me grinding LeetCode problems,
-            exploring machine learning with Python and NumPy, or designing
-            pixel-perfect UIs in Figma. I scored{' '}
-            <strong>94.8% in Class X</strong> and <strong>86.8% in Class XII</strong>
-            {' '}— and I bring that same dedication to every project I build.
+            When I'm not shipping, I'm grinding LeetCode, exploring ML with
+            Python, or crafting pixel-perfect UIs in Figma. I believe the
+            best way to learn is to build.
           </p>
 
           {(projectCount > 0 || certCount > 0) && (
             <div className="about-stats" data-reveal>
               {projectCount > 0 && (
                 <div className="stat">
+                  <FaFolderOpen className="stat-icon" />
                   <span className="stat-num">{projectCount}</span>
-                  <span className="stat-label">Projects Shipped</span>
+                  <span className="stat-label">Projects Built</span>
                 </div>
               )}
               {certCount > 0 && (
                 <div className="stat">
+                  <FaAward className="stat-icon" />
                   <span className="stat-num">{certCount}</span>
                   <span className="stat-label">Certifications</span>
                 </div>
               )}
               <div className="stat">
+                <FaLaptopCode className="stat-icon" />
                 <span className="stat-num">5+</span>
-                <span className="stat-label">Languages</span>
+                <span className="stat-label">Technologies Used</span>
               </div>
             </div>
           )}
+
+          <motion.a
+            href="/Resume-Dakshesh Sharma.pdf"
+            download
+            className="resume-btn"
+            data-reveal
+            data-cursor="hover"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <FaDownload />
+            Download Resume
+          </motion.a>
 
           <div className="education">
             <h3 className="education-title" data-reveal>Education</h3>
