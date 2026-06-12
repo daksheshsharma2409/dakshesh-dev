@@ -2,12 +2,11 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { experience } from '../data/portfolio';
 import './Experience.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Experience() {
+export default function Experience({ experience }) {
   const ref = useRef(null);
   const lineRef = useRef(null);
 
@@ -31,7 +30,6 @@ export default function Experience() {
         );
       }
 
-      // Reveal items via IO
       const items = ref.current?.querySelectorAll('[data-reveal]');
       if (items) {
         const io = new IntersectionObserver(
@@ -53,6 +51,8 @@ export default function Experience() {
     return () => ctx.revert();
   }, []);
 
+  if (!experience || experience.length === 0) return null;
+
   return (
     <section className="experience section" id="experience" ref={ref}>
       <div className="container">
@@ -61,11 +61,6 @@ export default function Experience() {
           <h2 className="section-title" data-reveal>
             Where I've been <span className="gradient">shipping</span>.
           </h2>
-          <p className="section-subtitle" data-reveal>
-            Three internships across agritech, cybersecurity, and a national
-            data-science fellowship — each one sharpening how I work with
-            real data, in real teams, on real deadlines.
-          </p>
         </div>
 
         <div className="timeline">
@@ -84,7 +79,7 @@ export default function Experience() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.7, delay: i * 0.05 }}
             >
-              <div className="timeline-dot" style={{ '--c': item.color }} aria-hidden>
+              <div className="timeline-dot" style={{ '--c': item.color || '#c8ff00' }} aria-hidden>
                 <span />
               </div>
 
@@ -94,24 +89,28 @@ export default function Experience() {
                     <span className="timeline-period">{item.period}</span>
                     <h3 className="timeline-role">{item.role}</h3>
                     <p className="timeline-company">
-                      <span style={{ color: item.color }}>{item.company}</span>
-                      {item.companyFull ? '' : ''} · <span className="muted">{item.location}</span>
+                      <span style={{ color: item.color || '#c8ff00' }}>{item.company}</span>
+                      {' '}· <span className="muted">{item.location}</span>
                     </p>
                   </div>
                   <div className="timeline-num">0{i + 1}</div>
                 </div>
 
-                <ul className="timeline-bullets">
-                  {item.description.map((d, j) => (
-                    <li key={j}>{d}</li>
-                  ))}
-                </ul>
+                {item.description && (
+                  <ul className="timeline-bullets">
+                    {item.description.map((d, j) => (
+                      <li key={j}>{d}</li>
+                    ))}
+                  </ul>
+                )}
 
-                <div className="timeline-skills">
-                  {item.skills.map((s) => (
-                    <span key={s} className="chip">{s}</span>
-                  ))}
-                </div>
+                {item.skills && (
+                  <div className="timeline-skills">
+                    {item.skills.map((s) => (
+                      <span key={s} className="chip">{s}</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.article>
           ))}

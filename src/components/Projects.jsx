@@ -1,18 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { projects } from '../data/portfolio';
 import './Projects.css';
 
-export default function Projects() {
+export default function Projects({ projects }) {
   const [active, setActive] = useState(0);
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
-
-  // Parallax on track
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
 
   useEffect(() => {
     const cards = trackRef.current?.querySelectorAll('.project-card');
@@ -41,9 +34,8 @@ export default function Projects() {
             Projects I <span className="gradient">actually</span> built.
           </h2>
           <p className="section-subtitle" data-reveal>
-            A mix of ML case studies, VR engineering, and data-viz storytelling.
-            Each one taught me something new about the gap between a notebook
-            and a shipped product.
+            Real projects, real users, real code. Each one pushed me to learn
+            something new and ship something better.
           </p>
         </div>
       </div>
@@ -87,11 +79,36 @@ export default function Projects() {
 
 function ProjectCard({ project, idx, total, isActive }) {
   const cardRef = useRef(null);
+  const tiltRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: cardRef,
     offset: ['start end', 'end start'],
   });
   const imgY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+
+  // Tilt on hover
+  useEffect(() => {
+    const el = tiltRef.current;
+    if (!el) return;
+
+    const onMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(800px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) scale(1.01)`;
+    };
+
+    const onLeave = () => {
+      el.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+    };
+
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    return () => {
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+    };
+  }, []);
 
   return (
     <motion.article
@@ -103,11 +120,11 @@ function ProjectCard({ project, idx, total, isActive }) {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="project-card-inner">
+      <div className="project-card-inner" ref={tiltRef} style={{ transition: 'transform 0.15s ease' }}>
         <div className="project-visual" style={{ background: project.gradient }}>
           <motion.div className="project-visual-img" style={{ y: imgY }}>
             <img
-              src={project.image}
+              src={project.image || ''}
               alt={project.title}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -140,6 +157,7 @@ function ProjectCard({ project, idx, total, isActive }) {
           </div>
 
           <h3 className="project-title">{project.title}</h3>
+          {project.date && <span className="project-date">{project.date}</span>}
 
           <p className="project-description">{project.description}</p>
 
@@ -156,6 +174,40 @@ function ProjectCard({ project, idx, total, isActive }) {
             {project.tags.map((t) => (
               <span key={t} className="chip">{t}</span>
             ))}
+          </div>
+
+          {/* Project links */}
+          <div className="project-links">
+            {project.codeLink && (
+              <a
+                href={project.codeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link"
+                data-cursor="hover"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
+                Code
+              </a>
+            )}
+            {project.liveLink && (
+              <a
+                href={project.liveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link project-link-live"
+                data-cursor="hover"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+                Live Demo
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -1,0 +1,120 @@
+{
+  "profile": {
+    "name": "Dakshesh Sharma",
+    "firstName": "Dakshesh",
+    "lastName": "Sharma",
+    "role": "AI & Full-Stack Developer",
+    "tagline": "Building intelligent systems & crafting pixel-perfect experiences — one commit at a time.",
+    "location": "Ferozepur, Punjab, India",
+    "email": "dakshesh.s25130@nst.rishihood.edu.in",
+    "phone": "+91 98145 48554",
+    "availableFor": "Open to internships & collaborations",
+    "social": {
+      "linkedin": "https://www.linkedin.com/in/daksheshsharma2007/",
+      "github": "https://github.com/daksheshsharma2409",
+      "leetcode": "https://leetcode.com/u/daksheshsharma2007/",
+      "email": "mailto:dakshesh.s25130@nst.rishihood.edu.in"
+    }
+  },
+
+  "education": [
+    {
+      "school": "Newton School of Technology, Rishihood University",
+      "degree": "Bachelor of Technology (Artificial Intelligence)",
+      "period": "2025 — 2029",
+      "location": "Sonipat, Haryana",
+      "gpa": "Pursuing"
+    },
+    {
+      "school": "D C Model Sr Sec School",
+      "degree": "Intermediate (Class XII)",
+      "period": "2024 — 2025",
+      "location": "Ferozepur Cantt, Punjab",
+      "gpa": "86.8%"
+    },
+    {
+      "school": "Dass and Brown World School",
+      "degree": "Matriculation (Class X)",
+      "period": "2022 — 2023",
+      "location": "Firozpur, Punjab",
+      "gpa": "94.8%"
+    }
+  ],
+
+  "experience": [],
+
+  "projects": [
+    {
+      "id": "launchpad",
+      "title": "Launchpad",
+      "subtitle": "React · Aggregator · Recommendation Engine",
+      "description": "A centralized opportunity aggregator that consolidates hackathons, internships, and jobs from multiple platforms into a single, personalized feed with smart recommendations.",
+      "highlights": [
+        "Engineered a recommendation engine to filter opportunities based on user-selected skills, academic branch, and interests",
+        "Implemented dynamic deadline tracking and visual badges using React state management for closing applications",
+        "Architected a responsive UI with advanced search, multi-category filtering, and persistent bookmarking system"
+      ],
+      "tags": ["React", "JavaScript", "API Integration", "State Management"],
+      "codeLink": "https://github.com/daksheshsharma2409/launchpad",
+      "liveLink": "https://launchpad-three-flax.vercel.app/",
+      "gradient": "linear-gradient(135deg, #c8ff00 0%, #00d4ff 100%)",
+      "date": "April 2026"
+    },
+    {
+      "id": "picked-n-packed",
+      "title": "Picked & Packed",
+      "subtitle": "Vanilla JS · Tailwind CSS · REST API",
+      "description": "A responsive e-commerce storefront consuming the DummyJSON REST API to render 194+ products with a slick, mobile-first shopping experience.",
+      "highlights": [
+        "Built with Vanilla JS and Tailwind CSS, consuming DummyJSON REST API for 194+ products with category filtering",
+        "Implemented localStorage caching, dynamic product cards, cart and wishlist functionality",
+        "Designed mobile-first UI with floating bottom dock-like navigation"
+      ],
+      "tags": ["JavaScript", "Tailwind CSS", "REST API", "LocalStorage"],
+      "codeLink": "https://github.com/daksheshsharma2409/picked_n_packed",
+      "liveLink": "https://picked-n-packed.vercel.app/",
+      "gradient": "linear-gradient(135deg, #7c3aed 0%, #c8ff00 100%)",
+      "date": "March 2026"
+    }
+  ],
+
+  "achievements": [],
+
+  "certifications": [
+    {
+      "title": "C++ Data Structures & Algorithms + LeetCode Exercises",
+      "issuer": "Udemy",
+      "date": "August 2025",
+      "description": "Comprehensive certification covering data structures, algorithms, and problem-solving with hands-on LeetCode practice.",
+      "icon": "algo",
+      "color": "#c8ff00"
+    },
+    {
+      "title": "Learn Python: The Complete Python Programming Course",
+      "issuer": "Udemy",
+      "date": "June 2022",
+      "description": "Full Python programming course covering syntax, data structures, OOP, file handling, and project-based learning.",
+      "icon": "python",
+      "color": "#00d4ff"
+    }
+  ],
+
+  "skills": {
+    "Languages": ["Python", "C++", "HTML", "CSS", "JavaScript"],
+    "ML & Data": ["Machine Learning", "NumPy", "Pandas", "Matplotlib"],
+    "Frameworks": ["React", "Next.js", "Django", "Tailwind CSS", "OpenCV"],
+    "Tools & Platforms": ["Git", "GitHub", "Linux", "UNIX", "MySQL", "Figma", "Hugging Face"],
+    "Soft Skills": ["Decision-making", "Research", "Critical Thinking", "Communication", "Documentation Writing"]
+  },
+
+  "sections": [
+    { "id": "hero", "label": "Home", "dataKey": null },
+    { "id": "about", "label": "About", "dataKey": null },
+    { "id": "experience", "label": "Experience", "dataKey": "experience" },
+    { "id": "projects", "label": "Projects", "dataKey": "projects" },
+    { "id": "skills", "label": "Skills", "dataKey": "skills" },
+    { "id": "achievements", "label": "Achievements", "dataKey": "achievements" },
+    { "id": "certifications", "label": "Certifications", "dataKey": "certifications" },
+    { "id": "contact", "label": "Contact", "dataKey": null }
+  ]
+}

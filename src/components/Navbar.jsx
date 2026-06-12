@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.css';
-import { profile } from '../data/portfolio';
 
-const links = [
-  { href: '#about', label: 'About' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#achievements', label: 'Achievements' },
-  { href: '#contact', label: 'Contact' },
-];
-
-export default function Navbar() {
+export default function Navbar({ sections, hasData, profile }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // Build nav links dynamically — only include sections that have data
+  const links = sections
+    .filter((s) => {
+      // Hero is never in the nav
+      if (s.id === 'hero') return false;
+      // Sections with a dataKey only show if they have data
+      if (s.dataKey) return hasData(s.dataKey);
+      return true;
+    })
+    .map((s) => ({ href: `#${s.id}`, label: s.label }));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -48,7 +49,7 @@ export default function Navbar() {
           href={profile.social.email}
           className="nav-cta"
           data-cursor="hover"
-          aria-label="Email Dakshesh"
+          aria-label={`Email ${profile.firstName}`}
         >
           <span>Hire Me</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

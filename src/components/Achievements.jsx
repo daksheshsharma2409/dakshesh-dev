@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { achievements, certifications } from '../data/portfolio';
 import './Achievements.css';
 
-export default function Achievements() {
+export default function Achievements({ achievements }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -22,13 +21,15 @@ export default function Achievements() {
     return () => io.disconnect();
   }, []);
 
+  if (!achievements || achievements.length === 0) return null;
+
   return (
     <section className="achievements section" id="achievements" ref={ref}>
       <div className="container">
         <div className="ach-header">
           <span className="section-label" data-reveal>Recognition</span>
           <h2 className="section-title" data-reveal>
-            Numbers, certs, <span className="gradient">and a few flexes</span>.
+            Numbers <span className="gradient">that matter</span>.
           </h2>
         </div>
 
@@ -36,38 +37,6 @@ export default function Achievements() {
           {achievements.map((a, i) => (
             <AchievementCard key={a.label} ach={a} idx={i} />
           ))}
-        </div>
-
-        <div className="certs-section">
-          <div className="certs-header">
-            <h3 className="certs-title" data-reveal>Certifications</h3>
-            <p className="certs-sub" data-reveal>
-              Continually learning. Here are some of the courses and certs
-              that have sharpened how I work.
-            </p>
-          </div>
-
-          <div className="certs-grid">
-            {certifications.map((c, i) => (
-              <motion.div
-                key={c.title}
-                className="cert-card"
-                data-reveal
-                style={{ transitionDelay: `${i * 60}ms`, '--c': c.color }}
-                whileHover={{ y: -6 }}
-              >
-                <div className="cert-icon" aria-hidden>
-                  <CertIcon name={c.icon} />
-                </div>
-                <div className="cert-body">
-                  <h4 className="cert-title">{c.title}</h4>
-                  <span className="cert-issuer">{c.issuer}</span>
-                  <p className="cert-desc">{c.description}</p>
-                </div>
-                <div className="cert-glow" aria-hidden />
-              </motion.div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
@@ -120,14 +89,8 @@ function CountUp({ value, active }) {
 
 function AchievementIcon({ name }) {
   const props = {
-    width: 28,
-    height: 28,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.6,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
+    width: 28, height: 28, viewBox: '0 0 24 24', fill: 'none',
+    stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round',
   };
   switch (name) {
     case 'trophy':
@@ -161,54 +124,6 @@ function AchievementIcon({ name }) {
         <svg {...props}>
           <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
           <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-}
-
-function CertIcon({ name }) {
-  const props = {
-    width: 24,
-    height: 24,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.6,
-    strokeLinecap: 'round',
-    strokeLinejoin: 'round',
-  };
-  switch (name) {
-    case 'google':
-      return (
-        <svg {...props}>
-          <circle cx="12" cy="12" r="10" />
-          <path d="M8 12a4 4 0 0 0 8 0" />
-          <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-        </svg>
-      );
-    case 'python':
-      return (
-        <svg {...props}>
-          <path d="M9 3h6a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H9a3 3 0 0 0-3 3v3a3 3 0 0 1-3 3" />
-          <path d="M3 3a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H6a3 3 0 0 0-3 3v3a3 3 0 0 0 3 3" />
-        </svg>
-      );
-    case 'algo':
-      return (
-        <svg {...props}>
-          <path d="M3 6h18M3 12h18M3 18h18" />
-          <circle cx="7" cy="6" r="2" />
-          <circle cx="17" cy="12" r="2" />
-          <circle cx="7" cy="18" r="2" />
-        </svg>
-      );
-    case 'shield':
-      return (
-        <svg {...props}>
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          <path d="m9 12 2 2 4-4" />
         </svg>
       );
     default:

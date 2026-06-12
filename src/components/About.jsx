@@ -1,13 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { profile, education } from '../data/portfolio';
 import './About.css';
 
-export default function About() {
+export default function About({ profile, education, projects, certifications }) {
   const ref = useRef(null);
-  const imgRef = useRef(null);
 
-  // Parallax for the about photo
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
@@ -33,6 +30,10 @@ export default function About() {
     return () => io.disconnect();
   }, []);
 
+  // Dynamic stats computed from actual data
+  const projectCount = projects?.length || 0;
+  const certCount = certifications?.length || 0;
+
   return (
     <section className="about section" id="about" ref={ref}>
       <div className="container about-grid">
@@ -40,7 +41,7 @@ export default function About() {
           <motion.div className="photo-frame" style={{ y: imgY, scale: imgScale }}>
             <img
               src="/images/about.jpg"
-              alt="Portrait of Dakshesh Sharma"
+              alt={`Portrait of ${profile.name}`}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling.style.display = 'flex';
@@ -55,52 +56,59 @@ export default function About() {
           <div className="photo-sticker">
             <span className="sticker-dot" />
             <div>
-              <strong>Dakshesh Sharma</strong>
-              <span>B.E. Computer Engineering · Data Science</span>
+              <strong>{profile.name}</strong>
+              <span>B.Tech AI · Newton School of Technology</span>
             </div>
           </div>
           <div className="photo-corner">
-            <span>Pune, MH</span>
-            <span>2022 — Present</span>
+            <span>{profile.location}</span>
+            <span>2025 — Present</span>
           </div>
         </div>
 
         <div className="about-content">
           <span className="section-label" data-reveal>About</span>
           <h2 className="section-title" data-reveal>
-            Engineer by training, <br />
-            <span className="gradient">data scientist by curiosity</span>.
+            Student by day, <br />
+            <span className="gradient">builder by obsession</span>.
           </h2>
 
           <p className="about-bio" data-reveal>
-            I'm a final-year Computer Engineering student at PVG's COEP,
-            Pune, specialising in Data Science. I love turning messy,
-            high-dimensional data into systems that actually work in
-            production — from risk-scoring 100K+ farmers for Niqo Robotics
-            to building threat-intel pipelines at Securin.
+            I'm a first-year B.Tech Artificial Intelligence student at{' '}
+            <strong>Newton School of Technology, Rishihood University</strong>.
+            I'm passionate about building things that live on the internet — 
+            from smart recommendation engines to responsive e-commerce 
+            storefronts. I believe the best way to learn is to ship.
           </p>
 
           <p className="about-bio" data-reveal>
-            Outside of work you'll find me breaking down quant strategies,
-            training ML models on crypto markets, or contributing to VR
-            side-projects. I scored <strong>99.83 percentile in JEE Mains</strong>
-            {' '}— and I bring that same rigour to every model I ship.
+            When I'm not coding, you'll find me grinding LeetCode problems,
+            exploring machine learning with Python and NumPy, or designing
+            pixel-perfect UIs in Figma. I scored{' '}
+            <strong>94.8% in Class X</strong> and <strong>86.8% in Class XII</strong>
+            {' '}— and I bring that same dedication to every project I build.
           </p>
 
-          <div className="about-stats" data-reveal>
-            <div className="stat">
-              <span className="stat-num">3</span>
-              <span className="stat-label">Internships</span>
+          {(projectCount > 0 || certCount > 0) && (
+            <div className="about-stats" data-reveal>
+              {projectCount > 0 && (
+                <div className="stat">
+                  <span className="stat-num">{projectCount}</span>
+                  <span className="stat-label">Projects Shipped</span>
+                </div>
+              )}
+              {certCount > 0 && (
+                <div className="stat">
+                  <span className="stat-num">{certCount}</span>
+                  <span className="stat-label">Certifications</span>
+                </div>
+              )}
+              <div className="stat">
+                <span className="stat-num">5+</span>
+                <span className="stat-label">Languages</span>
+              </div>
             </div>
-            <div className="stat">
-              <span className="stat-num">6+</span>
-              <span className="stat-label">ML Projects</span>
-            </div>
-            <div className="stat">
-              <span className="stat-num">5+</span>
-              <span className="stat-label">Certifications</span>
-            </div>
-          </div>
+          )}
 
           <div className="education">
             <h3 className="education-title" data-reveal>Education</h3>
