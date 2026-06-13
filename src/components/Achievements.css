@@ -18,6 +18,12 @@
   gap: 20px;
 }
 
+@media (max-width: 768px) {
+  .ach-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ============================================================================
    Card Structure
    ============================================================================ */
@@ -30,7 +36,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ach-card:hover {
@@ -91,12 +97,23 @@
   place-items: center;
   cursor: zoom-in;
   opacity: 0;
+  transform: translateY(5px);
   transition: all 0.3s ease;
   z-index: 10;
 }
 
+/* Fades in the button when hovering the image */
 .ach-visual:hover .ach-zoom-btn {
   opacity: 1;
+  transform: translateY(0);
+}
+
+/* Applies the color border and scale when hovering the button itself */
+.ach-zoom-btn:hover {
+  background: rgba(10, 10, 10, 0.9);
+  color: var(--card-accent, var(--accent));
+  border-color: var(--card-accent, var(--accent));
+  transform: translateY(0) scale(1.05);
 }
 
 /* ============================================================================
@@ -252,10 +269,4 @@
   border-radius: 12px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
   user-select: none;
-}
-
-@media (max-width: 768px) {
-  .ach-grid {
-    grid-template-columns: 1fr;
-  }
 }
