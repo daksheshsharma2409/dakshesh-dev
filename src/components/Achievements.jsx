@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Trophy, GraduationCap, Rocket, Briefcase, Flame } from 'lucide-react';
-
 import './Achievements.css';
 
 export default function Achievements({ achievements }) {
@@ -47,56 +46,58 @@ export default function Achievements({ achievements }) {
 
 function AchievementCard({ ach, idx }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const inView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
     <motion.div
       ref={ref}
-      className={`ach-card ${idx === 0 ? 'is-feature' : ''}`}
+      className={`ach-card ${ach.screenshot ? 'has-screenshot' : ''}`}
       data-reveal
-      style={{ transitionDelay: `${idx * 80}ms` }}
-      whileHover={{ y: -4 }}
+      style={{ 
+        transitionDelay: `${idx * 80}ms`,
+        '--card-accent': ach.color || 'var(--accent)'
+      }}
+      whileHover={{ y: -6 }}
     >
-      {/* Screenshot — fixed height, covers cleanly, no overlap */}
+      <div className="ach-card-glow" />
+
       {ach.screenshot && (
-        <div className="ach-screenshot">
+        <div className="ach-screenshot-wrapper">
           <img src={ach.screenshot} alt={`${ach.title} screenshot`} loading="lazy" />
         </div>
       )}
 
-      {/* Icon sits below screenshot, not overlapping it */}
-      <div className="ach-body">
-        <div className="ach-icon" aria-hidden>
-          <AchievementIcon name={ach.icon} />
+      <div className="ach-card-body">
+        <div className="ach-card-top">
+          <div className="ach-icon" aria-hidden>
+            <AchievementIcon name={ach.icon} />
+          </div>
+          {ach.date && <span className="ach-date">{ach.date}</span>}
         </div>
 
-        <div className="ach-title">{ach.title}</div>
-
-        <div className="ach-metric">
-          <CountUp value={parseFloat(ach.metric)} active={inView} />
-          <span className="ach-suffix">{ach.suffix}</span>
+        <div className="ach-card-main">
+          <div className="ach-metric-wrapper">
+            <span className="ach-metric">
+              <CountUp value={parseFloat(ach.metric)} active={inView} />
+            </span>
+            {ach.suffix && <span className="ach-suffix">{ach.suffix}</span>}
+          </div>
+          
+          <h3 className="ach-title">{ach.title}</h3>
+          <p className="ach-desc">{ach.description}</p>
         </div>
-
-        <div className="ach-label">{ach.label}</div>
-
-        {ach.date && (
-          <div className="ach-date">{ach.date}</div>
-        )}
-
-        <p className="ach-desc">{ach.description}</p>
-
-        {/* Spacer pushes button to bottom regardless of content height */}
-        <div className="ach-spacer" />
 
         {ach.postLink && (
-          <a
-            href={ach.postLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ach-link-btn"
-          >
-            {ach.postLinkText ? ach.postLinkText : 'View Post'}
-          </a>
+          <div className="ach-card-footer">
+            <a
+              href={ach.postLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ach-link-btn"
+            >
+              {ach.postLinkText ? ach.postLinkText : 'View Details'}
+            </a>
+          </div>
         )}
       </div>
     </motion.div>
@@ -107,9 +108,8 @@ function CountUp({ value, active }) {
   const ref = useRef(null);
   useEffect(() => {
     if (!ref.current || !active) return;
-    const duration = 1600;
+    const duration = 1400;
     const t0 = performance.now();
-    // Count decimal places in the original value (max 1)
     const decimals = value % 1 === 0 ? 0 : 1;
     const tick = (now) => {
       const t = Math.min(1, (now - t0) / duration);
@@ -125,13 +125,13 @@ function CountUp({ value, active }) {
 }
 
 function AchievementIcon({ name }) {
-  const props = { width: 28, height: 28, strokeWidth: 1.6 };
+  const props = { width: 22, height: 22, strokeWidth: 2 };
   switch (name) {
     case 'trophy':      return <Trophy {...props} />;
     case 'graduation':  return <GraduationCap {...props} />;
     case 'rocket':      return <Rocket {...props} />;
     case 'briefcase':   return <Briefcase {...props} />;
     case 'fire':        return <Flame {...props} />;
-    default:            return null;
+    default:            return <Trophy {...props} />;
   }
 }

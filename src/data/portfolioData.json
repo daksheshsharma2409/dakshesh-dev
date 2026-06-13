@@ -109,12 +109,36 @@
   },
   {
     "icon": "graduation",
-    "title": "Class X — 94.8%",
+    "title": "Semester 1 SGPA",
+    "metric": "9",
+    "suffix": "/10",
+    "label": "Newton School of Technology",
+    "date": "2026",
+    "description": "",
+    "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781321843/Screenshot_2026-06-13_at_9.06.51_AM_rxtiko.png",
+    "postLink": null,
+    "postLinkText": null
+  },
+  {
+    "icon": "graduation",
+    "title": "Class XII — CBSE",
+    "metric": "86.8",
+    "suffix": "%",
+    "label": "Intermediate Grade",
+    "date": "May 2025",
+    "description": "",
+    "screenshot": null,
+    "postLink": null,
+    "postLinkText": null
+  },
+  {
+    "icon": "graduation",
+    "title": "Class X — CBSE",
     "metric": "94.8",
     "suffix": "%",
     "label": "Matriculation Grade",
     "date": "May 2023",
-    "description": "Scored 94.8% in Class X from Dass and Brown World School, Firozpur.",
+    "description": "",
     "screenshot": null,
     "postLink": null,
     "postLinkText": null
