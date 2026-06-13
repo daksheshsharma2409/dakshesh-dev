@@ -61,8 +61,7 @@ export default function About({ profile, education, projects, certifications }) 
             </div>
           </div>
           <div className="photo-corner">
-            <span>{profile.location}</span>
-            <span>2025 — Present</span>
+            <span> 📍 {profile.location}</span>
           </div>
         </div>
 

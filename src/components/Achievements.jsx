@@ -99,7 +99,7 @@ function AchievementCard({ ach, idx, onOpenImage }) {
   return (
     <motion.div
       ref={ref}
-      className={`ach-card ${ach.screenshot ? 'has-screenshot' : ''}`}
+      className="ach-card"
       data-reveal
       style={{ 
         transitionDelay: `${idx * 80}ms`,
@@ -109,50 +109,36 @@ function AchievementCard({ ach, idx, onOpenImage }) {
     >
       <div className="ach-card-glow" />
 
+      {/* Changed class to ach-visual for consistency */}
       {ach.screenshot && (
-        <div className="ach-screenshot-wrapper">
-          <img src={ach.screenshot} alt={`${ach.title} screenshot`} loading="lazy" />
-          
-          {/* Zoom Button inside the image wrapper */}
-          <button 
-            className="ach-zoom-btn" 
-            onClick={onOpenImage}
-            aria-label="Enlarge image"
-          >
+        <div className="ach-visual" onClick={onOpenImage}>
+          <img src={ach.screenshot} alt={ach.title} loading="lazy" />
+          <button className="ach-zoom-btn">
             <Maximize2 size={16} strokeWidth={2.5} />
           </button>
         </div>
       )}
 
-      <div className="ach-card-body">
+      {/* Changed class to ach-inner for padding consistency */}
+      <div className="ach-inner">
         <div className="ach-card-top">
-          <div className="ach-icon" aria-hidden>
-            <AchievementIcon name={ach.icon} />
-          </div>
+          <div className="ach-icon"><AchievementIcon name={ach.icon} /></div>
           {ach.date && <span className="ach-date">{ach.date}</span>}
         </div>
 
         <div className="ach-card-main">
           <div className="ach-metric-wrapper">
-            <span className="ach-metric">
-              <CountUp value={parseFloat(ach.metric)} active={inView} />
-            </span>
+            <span className="ach-metric"><CountUp value={parseFloat(ach.metric)} active={inView} /></span>
             {ach.suffix && <span className="ach-suffix">{ach.suffix}</span>}
           </div>
-          
           <h3 className="ach-title">{ach.title}</h3>
           <p className="ach-desc">{ach.description}</p>
         </div>
 
         {ach.postLink && (
           <div className="ach-card-footer">
-            <a
-              href={ach.postLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ach-link-btn"
-            >
-              {ach.postLinkText ? ach.postLinkText : 'View Details'}
+            <a href={ach.postLink} target="_blank" rel="noopener noreferrer" className="ach-link-btn">
+              {ach.postLinkText || 'View Details'}
             </a>
           </div>
         )}
