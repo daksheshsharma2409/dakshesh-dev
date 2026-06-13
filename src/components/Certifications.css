@@ -14,7 +14,7 @@
 
 .cert-card {
   position: relative;
-  padding: 28px;
+  /* Removed padding here, moved to .cert-inner so the image spans edge-to-edge */
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--surface);
@@ -22,11 +22,74 @@
   -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .cert-card:hover {
   border-color: var(--c, var(--accent));
   box-shadow: 0 0 30px rgba(200, 255, 0, 0.06);
+}
+
+/* --- Inline Image Display --- */
+.cert-visual {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.cert-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.cert-card:hover .cert-visual img {
+  transform: scale(1.05);
+}
+
+.cert-zoom-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: zoom-in;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Fade in the button only when hovering over the visual */
+.cert-visual:hover .cert-zoom-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cert-zoom-btn:hover {
+  background: rgba(10, 10, 10, 0.9);
+  color: var(--c, var(--accent));
+  border-color: var(--c, var(--accent));
+  transform: translateY(0) scale(1.05);
+}
+
+/* --- Text Content Area --- */
+.cert-inner {
+  padding: 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .cert-icon {
@@ -114,4 +177,50 @@
   .certs-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==========================================
+   Certificate Lightbox Modal
+============================================= */
+.cert-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.cert-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100000;
+}
+
+.cert-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.cert-lightbox-img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  user-select: none;
 }

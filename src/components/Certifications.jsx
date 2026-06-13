@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Maximize2, X } from 'lucide-react';
 import './Certifications.css';
 
 export default function Certifications({ certifications }) {
   const ref = useRef(null);
+  const [selectedImg, setSelectedImg] = useState(null);
 
+  // Scroll reveal observer
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => {
@@ -21,48 +24,111 @@ export default function Certifications({ certifications }) {
     return () => io.disconnect();
   }, []);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedImg) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedImg]);
+
   if (!certifications || certifications.length === 0) return null;
 
   return (
-    <section className="certifications section" id="certifications" ref={ref}>
-      <div className="container">
-        <div className="certs-header">
-          <span className="section-label" data-reveal>Certifications</span>
-          <h2 className="section-title" data-reveal>
-            Always <span className="gradient">learning</span>.
-          </h2>
-          <p className="section-subtitle" data-reveal>
-            Courses and certifications that have sharpened my skills.
-          </p>
-        </div>
+    <>
+      <section className="certifications section" id="certifications" ref={ref}>
+        <div className="container">
+          <div className="certs-header">
+            <span className="section-label" data-reveal>Certifications</span>
+            <h2 className="section-title" data-reveal>
+              Always <span className="gradient">learning</span>.
+            </h2>
+            <p className="section-subtitle" data-reveal>
+              Courses and certifications that have sharpened my skills.
+            </p>
+          </div>
 
-        <div className="certs-grid">
-          {certifications.map((c, i) => (
-            <motion.div
-              key={c.title}
-              className="cert-card"
-              data-reveal
-              style={{ transitionDelay: `${i * 80}ms`, '--c': c.color }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="cert-icon" aria-hidden>
-                <CertIcon name={c.icon} />
-              </div>
-              <div className="cert-body">
-                <h4 className="cert-title">{c.title}</h4>
-                <div className="cert-meta">
-                  <span className="cert-issuer">{c.issuer}</span>
-                  {c.date && <span className="cert-date">{c.date}</span>}
+          <div className="certs-grid">
+            {certifications.map((c, i) => (
+              <motion.div
+                key={c.title}
+                className="cert-card"
+                data-reveal
+                style={{ transitionDelay: `${i * 80}ms`, '--c': c.color }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Image Display Area */}
+                {c.image && (
+                  <div 
+                    className="cert-visual" 
+                    onClick={() => setSelectedImg(c.image)}
+                    title="Click to enlarge"
+                  >
+                    <img src={c.image} alt={`${c.title} Certificate`} loading="lazy" />
+                    
+                    <button 
+                      className="cert-zoom-btn"
+                      aria-label="View Certificate"
+                    >
+                      <Maximize2 size={16} strokeWidth={2.5} />
+                    </button>
+                  </div>
+                )}
+
+                {/* Text Content Area */}
+                <div className="cert-inner">
+                  <div className="cert-icon" aria-hidden>
+                    <CertIcon name={c.icon} />
+                  </div>
+                  <div className="cert-body">
+                    <h4 className="cert-title">{c.title}</h4>
+                    <div className="cert-meta">
+                      <span className="cert-issuer">{c.issuer}</span>
+                      {c.date && <span className="cert-date">{c.date}</span>}
+                    </div>
+                    <p className="cert-desc">{c.description}</p>
+                  </div>
                 </div>
-                <p className="cert-desc">{c.description}</p>
-              </div>
-              <div className="cert-glow" aria-hidden />
-            </motion.div>
-          ))}
+
+                <div className="cert-glow" aria-hidden />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* --- Lightbox Modal --- */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div
+            className="cert-lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSelectedImg(null)}
+          >
+            <button className="cert-lightbox-close" onClick={() => setSelectedImg(null)}>
+              <X size={24} />
+            </button>
+            
+            <motion.img
+              src={selectedImg}
+              alt="Enlarged Certificate"
+              className="cert-lightbox-img"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()} 
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

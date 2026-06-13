@@ -1,11 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Trophy, GraduationCap, Rocket, Briefcase, Flame } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { Trophy, GraduationCap, Rocket, Briefcase, Flame, Maximize2, X } from 'lucide-react';
 import './Achievements.css';
 
 export default function Achievements({ achievements }) {
   const ref = useRef(null);
+  const [selectedImg, setSelectedImg] = useState(null);
 
+  // Intersection Observer for scroll reveal
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => {
@@ -22,29 +24,75 @@ export default function Achievements({ achievements }) {
     return () => io.disconnect();
   }, []);
 
+  // Lock body scroll when image modal is open
+  useEffect(() => {
+    if (selectedImg) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedImg]);
+
   if (!achievements || achievements.length === 0) return null;
 
   return (
-    <section className="achievements section" id="achievements" ref={ref}>
-      <div className="container">
-        <div className="ach-header">
-          <span className="section-label" data-reveal>Recognition</span>
-          <h2 className="section-title" data-reveal>
-            Numbers <span className="gradient">that matter</span>.
-          </h2>
-        </div>
+    <>
+      <section className="achievements section" id="achievements" ref={ref}>
+        <div className="container">
+          <div className="ach-header">
+            <span className="section-label" data-reveal>Recognition</span>
+            <h2 className="section-title" data-reveal>
+              Numbers <span className="gradient">that matter</span>.
+            </h2>
+          </div>
 
-        <div className="ach-grid">
-          {achievements.map((a, i) => (
-            <AchievementCard key={a.label} ach={a} idx={i} />
-          ))}
+          <div className="ach-grid">
+            {achievements.map((a, i) => (
+              <AchievementCard 
+                key={a.label} 
+                ach={a} 
+                idx={i} 
+                onOpenImage={() => setSelectedImg(a.screenshot)} 
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* --- Lightbox Modal --- */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div
+            className="ach-lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSelectedImg(null)} // Click background to close
+          >
+            <button className="ach-lightbox-close" onClick={() => setSelectedImg(null)}>
+              <X size={24} />
+            </button>
+            
+            <motion.img
+              src={selectedImg}
+              alt="Enlarged view"
+              className="ach-lightbox-img"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()} // Prevent clicking image from closing modal
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-function AchievementCard({ ach, idx }) {
+function AchievementCard({ ach, idx, onOpenImage }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
 
@@ -64,6 +112,15 @@ function AchievementCard({ ach, idx }) {
       {ach.screenshot && (
         <div className="ach-screenshot-wrapper">
           <img src={ach.screenshot} alt={`${ach.title} screenshot`} loading="lazy" />
+          
+          {/* Zoom Button inside the image wrapper */}
+          <button 
+            className="ach-zoom-btn" 
+            onClick={onOpenImage}
+            aria-label="Enlarge image"
+          >
+            <Maximize2 size={16} strokeWidth={2.5} />
+          </button>
         </div>
       )}
 

@@ -182,3 +182,86 @@
   background: var(--card-accent, var(--accent));
   border-color: var(--card-accent, var(--accent));
 }
+
+
+/* ==========================================
+   Image Zoom Button (Bottom Right of Image)
+============================================= */
+.ach-screenshot-wrapper {
+  position: relative; /* Ensure wrapper handles absolute children */
+}
+
+.ach-zoom-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+/* Fade in the button only when hovering over the image area */
+.ach-screenshot-wrapper:hover .ach-zoom-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ach-zoom-btn:hover {
+  background: rgba(10, 10, 10, 0.9);
+  color: var(--card-accent, var(--accent));
+  border-color: var(--card-accent, var(--accent));
+  transform: translateY(0) scale(1.05);
+}
+
+.ach-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ach-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100000;
+}
+
+.ach-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.ach-lightbox-img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  user-select: none;
+}
