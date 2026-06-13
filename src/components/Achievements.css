@@ -12,6 +12,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 100px;
+  align-items: stretch;
 }
 
 @media (max-width: 1024px) {
@@ -22,9 +23,13 @@
   .ach-grid { grid-template-columns: 1fr; }
 }
 
+/* Single unified card rule — no duplicate blocks */
 .ach-card {
   position: relative;
-  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;                  /* padding moved to ach-body */
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-elev);
@@ -50,16 +55,41 @@
   pointer-events: none;
 }
 
+/* Screenshot — compact, not full column height */
+.ach-screenshot {
+  width: 100%;
+  height: 140px;             /* reduced from 180px */
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ach-screenshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Body — all content lives here, single padding source */
+.ach-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;             /* single padding, no double stacking */
+  gap: 0;                    /* control spacing per element below */
+}
+
 .ach-icon {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 40px;               /* slightly smaller */
+  height: 40px;
+  border-radius: 10px;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 12px;       /* tighter than before */
+  flex-shrink: 0;
 }
 
 .ach-card.is-feature .ach-icon {
@@ -68,16 +98,23 @@
   border-color: var(--accent);
 }
 
+.ach-title {
+  font-size: 0.82rem;
+  opacity: 0.5;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
 .ach-metric {
   display: flex;
   align-items: baseline;
-  gap: 4px;
-  margin-bottom: 6px;
+  gap: 3px;
+  margin-bottom: 2px;
   font-family: var(--font-mono);
 }
 
 .ach-metric > span:first-child {
-  font-size: clamp(36px, 4vw, 56px);
+  font-size: clamp(28px, 3vw, 40px);   /* smaller than before */
   font-weight: 600;
   color: var(--text-h);
   line-height: 1;
@@ -85,25 +122,59 @@
 }
 
 .ach-suffix {
-  font-size: 20px;
+  font-size: 16px;
   color: var(--text-soft);
   font-weight: 500;
 }
 
 .ach-label {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-h);
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ach-date {
+  font-size: 0.78rem;
+  opacity: 0.45;
+  margin-bottom: 6px;
 }
 
 .ach-desc {
-  font-size: 13px;
-  color: var(--text-soft);
+  font-size: 0.82rem;
+  opacity: 0.55;
   line-height: 1.5;
+  margin-bottom: 0;
 }
 
-/* Certifications */
+/* Spacer pushes button to bottom */
+.ach-spacer {
+  flex: 1;
+  min-height: 12px;
+}
+
+/* Link button */
+.ach-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 12px;
+  padding: 6px 14px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  width: fit-content;
+}
+
+.ach-link-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Certifications ────────────────────────────────── */
 .certs-section { margin-top: 0; }
 
 .certs-header {

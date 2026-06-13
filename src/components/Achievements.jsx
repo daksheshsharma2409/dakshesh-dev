@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { Trophy, GraduationCap, Rocket, Briefcase, Flame } from 'lucide-react';
+
 import './Achievements.css';
 
 export default function Achievements({ achievements }) {
@@ -46,6 +48,7 @@ export default function Achievements({ achievements }) {
 function AchievementCard({ ach, idx }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
+
   return (
     <motion.div
       ref={ref}
@@ -54,15 +57,48 @@ function AchievementCard({ ach, idx }) {
       style={{ transitionDelay: `${idx * 80}ms` }}
       whileHover={{ y: -4 }}
     >
-      <div className="ach-icon" aria-hidden>
-        <AchievementIcon name={ach.icon} />
+      {/* Screenshot — fixed height, covers cleanly, no overlap */}
+      {ach.screenshot && (
+        <div className="ach-screenshot">
+          <img src={ach.screenshot} alt={`${ach.title} screenshot`} loading="lazy" />
+        </div>
+      )}
+
+      {/* Icon sits below screenshot, not overlapping it */}
+      <div className="ach-body">
+        <div className="ach-icon" aria-hidden>
+          <AchievementIcon name={ach.icon} />
+        </div>
+
+        <div className="ach-title">{ach.title}</div>
+
+        <div className="ach-metric">
+          <CountUp value={parseFloat(ach.metric)} active={inView} />
+          <span className="ach-suffix">{ach.suffix}</span>
+        </div>
+
+        <div className="ach-label">{ach.label}</div>
+
+        {ach.date && (
+          <div className="ach-date">{ach.date}</div>
+        )}
+
+        <p className="ach-desc">{ach.description}</p>
+
+        {/* Spacer pushes button to bottom regardless of content height */}
+        <div className="ach-spacer" />
+
+        {ach.postLink && (
+          <a
+            href={ach.postLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ach-link-btn"
+          >
+            {ach.postLinkText ? ach.postLinkText : 'View Post'}
+          </a>
+        )}
       </div>
-      <div className="ach-metric">
-        <CountUp value={parseFloat(ach.metric)} active={inView} />
-        <span className="ach-suffix">{ach.suffix}</span>
-      </div>
-      <div className="ach-label">{ach.label}</div>
-      <p className="ach-desc">{ach.description}</p>
     </motion.div>
   );
 }
@@ -71,14 +107,15 @@ function CountUp({ value, active }) {
   const ref = useRef(null);
   useEffect(() => {
     if (!ref.current || !active) return;
-    let start = 0;
     const duration = 1600;
     const t0 = performance.now();
+    // Count decimal places in the original value (max 1)
+    const decimals = value % 1 === 0 ? 0 : 1;
     const tick = (now) => {
       const t = Math.min(1, (now - t0) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
-      const v = start + (value - start) * eased;
-      ref.current.textContent = v.toFixed(value % 1 === 0 ? 0 : 2);
+      const v = value * eased;
+      ref.current.textContent = v.toFixed(decimals);
       if (t < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -88,45 +125,13 @@ function CountUp({ value, active }) {
 }
 
 function AchievementIcon({ name }) {
-  const props = {
-    width: 28, height: 28, viewBox: '0 0 24 24', fill: 'none',
-    stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round',
-  };
+  const props = { width: 28, height: 28, strokeWidth: 1.6 };
   switch (name) {
-    case 'trophy':
-      return (
-        <svg {...props}>
-          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-          <path d="M4 22h16" />
-          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-        </svg>
-      );
-    case 'graduation':
-      return (
-        <svg {...props}>
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-          <path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5" />
-        </svg>
-      );
-    case 'rocket':
-      return (
-        <svg {...props}>
-          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z" />
-          <path d="M12 15c-1.5 0-3-1-3-3s1-3 3-3 3 1 3 3-1.5 3-3 3Z" />
-          <path d="M9 12c0-3 1.5-6 6-9 0 0 1 4.5-1 9" />
-        </svg>
-      );
-    case 'briefcase':
-      return (
-        <svg {...props}>
-          <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-        </svg>
-      );
-    default:
-      return null;
+    case 'trophy':      return <Trophy {...props} />;
+    case 'graduation':  return <GraduationCap {...props} />;
+    case 'rocket':      return <Rocket {...props} />;
+    case 'briefcase':   return <Briefcase {...props} />;
+    case 'fire':        return <Flame {...props} />;
+    default:            return null;
   }
 }

@@ -41,7 +41,21 @@
     }
   ],
 
-  "experience": [],
+  "experience": [
+  {
+    "period": "2018 — Present",
+    "role": "Independent Developer",
+    "company": "Individual",
+    "location": "Remote",
+    "color": "#6366f1", 
+    "description": [
+      "Experimented with machine learning and deep learning frameworks to build and train models for various applications.",
+      "Developed an algorithm to solve real-world problems and optimized it to improve efficiency.",
+      "Built full-stack applications using modern web technologies and development practices."
+    ],
+    "skills": ["Python", "JavaScript", "React", "Pandas", "Numpy", "Matplotlib"]
+  }
+],
 
   "projects": [
     {
@@ -80,7 +94,32 @@
     }
   ],
 
-  "achievements": [],
+  "achievements": [
+  {
+    "icon": "fire",
+    "title": "250 Questions on Leetcode",
+    "metric": "250",
+    "suffix": "+",
+    "label": "Coding Problems Solved",
+    "date": "24 March 2025",
+    "description": "Solved 250+ problems on Leetcode with a focus on Data Structures and Algorithms.",
+    "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1781316342/1774349029897_ui0zgw.jpg",
+    "postLink": "https://www.linkedin.com/feed/update/urn:li:activity:7442159238304628738/",
+    "postLinkText": "View on LinkedIn"
+  },
+  {
+    "icon": "graduation",
+    "title": "Class X — 94.8%",
+    "metric": "94.8",
+    "suffix": "%",
+    "label": "Matriculation Grade",
+    "date": "May 2023",
+    "description": "Scored 94.8% in Class X from Dass and Brown World School, Firozpur.",
+    "screenshot": null,
+    "postLink": null,
+    "postLinkText": null
+  }
+],
 
   "certifications": [
     {
