@@ -137,6 +137,10 @@ p {
   z-index: 10;
 }
 
+.app-main {
+  position: relative;
+}
+
 .section-label {
   display: inline-flex;
   align-items: center;

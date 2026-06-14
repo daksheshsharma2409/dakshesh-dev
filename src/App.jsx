@@ -12,17 +12,14 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Cursor from './components/Cursor';
 
-// Import all JSON data
 import data from './data/portfolioData.json';
 
-// Helper to check if data exists
 const hasData = (key) => {
   return data[key] && Object.keys(data[key]).length > 0;
 };
 
 function App() {
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -49,10 +46,17 @@ function App() {
     <>
       <Cursor />
       <Navbar profile={data.profile} data={data} />
-      
+
       <main className="app-main">
         {hasData('profile') && <Hero profile={data.profile} />}
-        {hasData('profile') && <About profile={data.profile} education={data.education} projects={data.projects} certifications={data.certifications} />}
+        {hasData('profile') && (
+          <About
+            profile={data.profile}
+            education={data.education}
+            projects={data.projects}
+            certifications={data.certifications}
+          />
+        )}
         {hasData('experience') && <Experience experience={data.experience} />}
         {hasData('projects') && <Projects projects={data.projects} />}
         {hasData('skills') && <Skills skills={data.skills} />}

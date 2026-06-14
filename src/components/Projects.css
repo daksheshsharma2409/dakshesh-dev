@@ -1,15 +1,16 @@
 .projects {
   position: relative;
+  padding-top: clamp(32px, 4vw, 56px);
   padding-bottom: 60px;
 }
 
 .projects-header {
   max-width: 720px;
-  margin-bottom: 60px;
+  margin-bottom: 48px;
 }
 
 .project-rail-wrap {
-  padding: 40px 0 60px;
+  padding: 0 0 60px;
   position: relative;
 }
 

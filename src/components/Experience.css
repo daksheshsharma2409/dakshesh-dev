@@ -1,5 +1,6 @@
 .experience {
   position: relative;
+  padding-bottom: clamp(32px, 4vw, 56px);
 }
 
 .experience-header {

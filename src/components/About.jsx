@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
 import { FaFolderOpen, FaAward, FaLaptopCode, FaDownload } from 'react-icons/fa';
-import SectionSpine from './SectionSpine';
 import './About.css';
 
 export default function About({ profile, education, projects, certifications }) {

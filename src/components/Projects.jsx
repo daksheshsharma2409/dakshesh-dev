@@ -5,13 +5,8 @@ import {
     useScroll,
     useTransform,
 } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Maximize2, X } from "lucide-react"; // Added icons
-import SectionSpine from "./SectionSpine";
+import { Maximize2, X } from "lucide-react";
 import "./Projects.css";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Projects({ projects }) {
     const sectionRef = useRef(null);
@@ -34,34 +29,23 @@ export default function Projects({ projects }) {
     }, [selectedImg]);
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            const cards = gsap.utils.toArray(".project-card");
-            if (cards.length === 0) return;
+        const items = sectionRef.current?.querySelectorAll("[data-reveal]");
+        if (!items?.length) return;
 
-            // Reveal section
-            gsap.fromTo(
-                sectionRef.current.querySelector(".projects-header"),
-                { opacity: 0, y: 30 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: "top 80%",
-                    },
-                },
-            );
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) {
+                        e.target.classList.add("is-visible");
+                        io.unobserve(e.target);
+                    }
+                });
+            },
+            { threshold: 0.2 },
+        );
 
-            // Horizontal Scroll
-            // gsap.to(cards, {
-            //   xPercent: -100 * (cards.length - 1),
-            //   ease: 'none',
-            //   ...
-            // });
-        }, sectionRef);
-
-        return () => ctx.revert();
+        items.forEach((el) => io.observe(el));
+        return () => io.disconnect();
     }, [projects]);
 
     return (
@@ -71,7 +55,6 @@ export default function Projects({ projects }) {
                 id="projects"
                 ref={sectionRef}
             >
-                <SectionSpine direction="right" />
                 <div className="container">
                     <div className="projects-header">
                         <span className="section-label" data-reveal>
