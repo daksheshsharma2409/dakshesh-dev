@@ -35,9 +35,27 @@
     aspect-ratio: 4 / 5;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    border: 8px solid var(--accent);
+    /* border: 8px solid var(--accent); */
     background: linear-gradient(180deg, #16161f, #0a0a0f);
     transform-origin: center;
+}
+
+.photo-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 8px;
+    background: var(--gradient-1);
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+    z-index: 1;
 }
 
 .photo-frame img {
