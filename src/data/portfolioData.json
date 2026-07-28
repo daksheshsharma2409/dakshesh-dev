@@ -192,9 +192,31 @@
     ],
 
     "skills": {
-        "Languages": ["Python", "C++", "HTML", "CSS", "JavaScript"],
-        "ML & Data": ["Machine Learning", "NumPy", "Pandas", "Matplotlib"],
-        "Frameworks": ["React", "Next.js", "Django", "Tailwind CSS", "OpenCV"],
+        "Languages": ["Python", "C++"],
+        "ML & Data": [
+            "Machine Learning",
+            "NumPy",
+            "Pandas",
+            "Matplotlib",
+            "OpenCV",
+            "SciKitLearn"
+        ],
+        "Frontend": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Next.js",
+            "Tailwind CSS"
+        ],
+        "Backend": [
+            "Django",
+            "Express",
+            "FastAPI",
+            "Node.js",
+            "MongoDB",
+            "MySQL"
+        ],
         "Tools & Platforms": [
             "Git",
             "GitHub",

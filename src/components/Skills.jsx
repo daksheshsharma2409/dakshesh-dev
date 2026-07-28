@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Html, Stars, Line } from "@react-three/drei";
 import {
@@ -13,13 +13,17 @@ import {
     FaHtml5,
     FaCss3,
     FaTerminal,
+    FaLinux,
+    FaGithub,
 } from "react-icons/fa";
 import {
     SiJavascript,
     SiTypescript,
     SiTailwindcss,
     SiMongodb,
+    SiFastapi,
     SiExpress,
+    SiHuggingface,
     SiNextdotjs,
     SiCplusplus,
     SiFirebase,
@@ -28,7 +32,10 @@ import {
     SiScikitlearn,
     SiPandas,
     SiOpencv,
+    SiDjango,
 } from "react-icons/si";
+
+import { VscGraphScatter } from "react-icons/vsc";
 import "./Skills.css";
 
 /*
@@ -39,20 +46,27 @@ import "./Skills.css";
 const getSkillIcon = (skillName) => {
     const s = skillName.toLowerCase();
     if (s.includes("react")) return <FaReact />;
-    if (s.includes("node") || s.includes("express")) return <FaNodeJs />;
+    if (s.includes("fastapi")) return <SiFastapi />;
+    if (s.includes("django")) return <SiDjango />;
+    if (s.includes("hugging")) return <SiHuggingface />;
+    if (s.includes("node")) return <FaNodeJs />;
+    if (s.includes("express")) return <SiExpress />;
+    if (s.includes("next")) return <SiNextdotjs />;
+    if (s.includes("matplotlib")) return <VscGraphScatter />;
     if (s.includes("python")) return <FaPython />;
     if (s.includes("docker")) return <FaDocker />;
     if (s.includes("aws")) return <FaAws />;
     if (s.includes("java") && !s.includes("script")) return <FaJava />;
-    if (s.includes("git")) return <FaGit />;
+    if (s.includes("github")) return <FaGithub />;
+    if (s.includes("git") && !s.includes("hub")) return <FaGit />;
     if (s.includes("figma")) return <FaFigma />;
     if (s.includes("html")) return <FaHtml5 />;
+    if (s.includes("tailwind")) return <SiTailwindcss />;
     if (s.includes("css")) return <FaCss3 />;
     if (s.includes("javascript") || s.includes("js")) return <SiJavascript />;
+    if (s.includes("linux") || s.includes("unix")) return <FaLinux />;
     if (s.includes("typescript")) return <SiTypescript />;
-    if (s.includes("tailwind")) return <SiTailwindcss />;
     if (s.includes("mongo")) return <SiMongodb />;
-    if (s.includes("next")) return <SiNextdotjs />;
     if (s.includes("c++")) return <SiCplusplus />;
     if (s.includes("firebase")) return <SiFirebase />;
     if (s.includes("postgres") || s.includes("sql")) return <SiPostgresql />;
