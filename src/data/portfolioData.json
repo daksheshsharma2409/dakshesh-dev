@@ -109,6 +109,18 @@
 
     "achievements": [
         {
+            "icon": "fire",
+            "title": "500 Questions on Leetcode",
+            "metric": "500",
+            "suffix": "+",
+            "label": "Coding Problems Solved",
+            "date": "24 March 2025",
+            "description": "",
+            "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1785761953/Screenshot_2026-07-30_at_9.15.51_PM_i9h4i1.png",
+            "postLink": "https://www.linkedin.com/posts/daksheshsharma2007_leetcode-btech-dsa-ugcPost-7488627954688610304-9l-u/",
+            "postLinkText": "View on LinkedIn"
+        },
+        {
             "icon": "graduation",
             "title": "Semester 2 SGPA",
             "metric": "10",
