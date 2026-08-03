@@ -53,21 +53,44 @@ export default function About({
                 <div className="about-photo" data-reveal>
                     <motion.div
                         className="photo-frame"
-                        style={{ y: imgY, scale: "imgScale" }}
+                        style={{ y: imgY, scale: imgScale }}
                     >
-                        <div className="photo-fallback" aria-hidden>
-                            <img
-                                style={{
-                                    borderRadius: "150px",
-                                    border: "6px white solid",
-                                }}
-                                src="/images/profile.png"
-                                alt={`Portrait of ${profile.name}`}
-                            />
-                            {/* <span className="fallback-initials">DS</span> */}
-                            {/* <span className="fallback-label">your photo here</span> */}
-                            {/* <span className="fallback-hint">public/images/profile.jpg</span> */}
+                        {/* Decorative ambient orbs */}
+                        <div className="photo-orb photo-orb--lime" />
+                        <div className="photo-orb photo-orb--violet" />
+                        <div className="photo-orb photo-orb--cyan" />
+
+                        {/* Rotating outer ring */}
+                        <div className="photo-ring-outer">
+                            <div className="photo-ring-inner" />
                         </div>
+
+                        {/* Main clipped image */}
+                        <div className="photo-clip-wrapper">
+                            <div className="photo-clip">
+                                <img
+                                    src="/images/profile.png"
+                                    alt={`Portrait of ${profile.name}`}
+                                />
+                                <div className="photo-clip-shimmer" />
+                            </div>
+                        </div>
+
+                        {/* Floating corner badge */}
+                        <div className="photo-badge photo-badge--tl">
+                            <span className="photo-badge-dot" />
+                            <span className="photo-badge-text">Open to Work</span>
+                        </div>
+
+                        {/* Bottom-right tech tag */}
+                        <div className="photo-badge photo-badge--br">
+                            <span className="photo-badge-text">AI / Full-Stack</span>
+                            <span className="photo-badge-dot photo-badge-dot--cyan" />
+                        </div>
+
+                        {/* Decorative corner accents */}
+                        <div className="photo-corner-accent photo-corner-accent--tl" />
+                        <div className="photo-corner-accent photo-corner-accent--br" />
                     </motion.div>
                 </div>
 
