@@ -110,11 +110,23 @@
     "achievements": [
         {
             "icon": "fire",
+            "title": "All Kill in Weekly Contest 515",
+            "metric": "4",
+            "suffix": "/4",
+            "label": "Contest Problems Solved",
+            "date": "16 August 2026",
+            "description": "",
+            "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1787197303/Screenshot_2026-08-16_at_9.45.43_PM_c4putm.png",
+            "postLink": "https://www.linkedin.com/posts/daksheshsharma2007_leetcode-weeklycontest515-competitiveprogramming-share-7494791535222231040-Nwc3",
+            "postLinkText": "View on LinkedIn"
+        },
+        {
+            "icon": "fire",
             "title": "500 Questions on Leetcode",
             "metric": "500",
             "suffix": "+",
             "label": "Coding Problems Solved",
-            "date": "24 March 2025",
+            "date": "24 March 2026",
             "description": "",
             "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1785761953/Screenshot_2026-07-30_at_9.15.51_PM_i9h4i1.png",
             "postLink": "https://www.linkedin.com/posts/daksheshsharma2007_leetcode-btech-dsa-ugcPost-7488627954688610304-9l-u/",
