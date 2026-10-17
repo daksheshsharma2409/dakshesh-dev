@@ -67,6 +67,62 @@
 
     "projects": [
         {
+            "id": "stox",
+            "title": "Stox",
+            "subtitle": "FinTech · Real-Time Market Data · Trading Engine",
+            "description": "A full-stack, zero-risk trading arena that transforms live US equities and cryptocurrency markets into an interactive trading experience. Stox combines realistic order execution, portfolio intelligence, real-time market updates, social trading, price alerts, and competitive leaderboards in one platform.",
+            "highlights": [
+                "Built a real-time trading engine for stocks and crypto with market, limit, stop-loss, and take-profit orders",
+                "Integrated live market data with Socket.IO, Redis, and PostgreSQL",
+                "Added social trading, portfolio analytics, price alerts, and competitive leaderboards",
+                "Tested core APIs with 38 passing integration tests across 4 suites"
+            ],
+            "tags": [
+                "Next.js",
+                "React",
+                "Node.js",
+                "Express",
+                "PostgreSQL",
+                "Prisma",
+                "Redis",
+                "BullMQ",
+                "Socket.IO",
+                "JWT & OAuth",
+                "Zod",
+                "Jest",
+                "Finnhub",
+                "Binance"
+            ],
+            "codeLink": "https://github.com/daksheshsharma2409/stox",
+            "liveLink": "",
+            "gradient": "linear-gradient(135deg, #00F5A0 0%, #00D9F5 50%, #7B61FF 100%)",
+            "date": "October 2026",
+            "image": ""
+        },
+        {
+            "id": "studywise",
+            "title": "StudyWise",
+            "subtitle": "Next.js · Express · PostgreSQL · Reputation Engine",
+            "description": "A peer-powered knowledge network where students earn reputation by sharing notes, with in-browser document previews, live voting, and public profiles with followers.",
+            "highlights": [
+                "Built a transactional vote and reputation engine in Prisma that handles votes, un-votes, and switches atomically",
+                "Engineered a document pipeline with Cloudinary storage, auto-generated PDF thumbnails, and in-browser PDF, DOCX, and PPTX previews",
+                "Shipped secure cross-domain auth using JWT in httpOnly cookies between a Vercel frontend and a Render API"
+            ],
+            "tags": [
+                "Next.js",
+                "Express",
+                "PostgreSQL",
+                "Prisma",
+                "Cloudinary"
+            ],
+            "codeLink": "https://github.com/daksheshsharma2409/studywise",
+            "liveLink": "https://study-wise-lake.vercel.app",
+            "gradient": "linear-gradient(135deg, #8e9aff 0%, #5b4eaa 100%)",
+            "date": "October 2026",
+            "image": ""
+        },
+        {
             "id": "launchpad",
             "title": "Launchpad",
             "subtitle": "React · Aggregator · Recommendation Engine",
