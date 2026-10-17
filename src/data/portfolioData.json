@@ -110,6 +110,18 @@
     "achievements": [
         {
             "icon": "fire",
+            "title": "At The Decision Room, BITS Pilani",
+            "metric": "1",
+            "suffix": "st Position",
+            "label": "Contest Problems Solved",
+            "date": "25 September 2026",
+            "description": "",
+            "screenshot": "https://res.cloudinary.com/daikmnvpa/image/upload/v1792242027/Bits_Certificate_mfwzex.jpg",
+            "postLink": "https://lnkd.in/p/dvVC_g4n",
+            "postLinkText": "View on LinkedIn"
+        },
+        {
+            "icon": "fire",
             "title": "All Kill in Weekly Contest 515",
             "metric": "4",
             "suffix": "/4",
